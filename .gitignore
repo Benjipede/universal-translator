@@ -1,3 +1,6 @@
+# Binary folder
+bin
+
 # Object files
 *.o
 *.ko

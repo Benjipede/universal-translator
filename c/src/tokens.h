@@ -9,6 +9,8 @@ typedef enum {
     Token_unknown,
     Token_whitespace,
     Token_comment,
+    Token_identifier,
+    Token_literal,
     Token_sof,
     Token_eof,
 } TokenType;
