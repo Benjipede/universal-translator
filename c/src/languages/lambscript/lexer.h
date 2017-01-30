@@ -1,10 +1,9 @@
-Token lex_simple(Reader *reader, string *storage)
+Token lex_lambscript(Reader *reader, string *storage)
 {
     Token token;
     u32 c;
     
     c = reader->curr(reader);
-    ASSERT(c != '\r');
     switch(c)
     {
         case eof:

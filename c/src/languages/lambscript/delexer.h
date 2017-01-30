@@ -1,4 +1,4 @@
-void delex_simple(Writer *writer, Token token)
+void delex_lambscript(Writer *writer, Token token)
 {
     switch(token.type)
     {
