@@ -39,6 +39,14 @@ typedef struct Stack
     s64 capacity;
 } Stack;
 
+Stack make_stack(Token *elements, s64 capacity)
+{
+    Stack result;
+    result.elements = elements;
+    result.count = 0;
+    result.capacity = capacity;
+    return result;
+}
 
 b8 push(Stack *stack, Token token)
 {
@@ -65,6 +73,16 @@ typedef struct Queue
     s64 count;
     s64 capacity;
 } Queue;
+
+Queue make_queue(Token *elements, s64 capacity)
+{
+    Queue result;
+    result.elements = elements;
+    result.first_index = 0;
+    result.count = 0;
+    result.capacity = capacity;
+    return result;
+}
 
 b8 queue(Queue *que, Token token)
 {

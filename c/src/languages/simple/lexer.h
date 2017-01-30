@@ -1,8 +1,4 @@
-#define STRING_CAPACITY 0x10000
-u8 string_buffer[STRING_CAPACITY];
-u8 *string_storage = string_buffer;
-
-Token lex_simple(Reader *reader)
+Token lex_simple(Reader *reader, string *storage)
 {
     Token token;
     u32 c;
@@ -23,7 +19,7 @@ Token lex_simple(Reader *reader)
         case '#':
         {
             token.type = Token_comment;
-            token.comment_text.data = string_storage;
+            token.comment_text.data = storage->data;
             for(c = reader->next(reader); ; c = reader->next(reader))
             {
                 if(c == eof || c == '\n')
@@ -37,20 +33,22 @@ Token lex_simple(Reader *reader)
                     reader->next(reader);
                     break;
                 }
-                *string_storage = (u8)c;
-                ++string_storage;
+                *storage->data = (u8)c;
+                ++storage->data;
+                --storage->count;
             }
-            token.comment_text.count = string_storage - token.comment_text.data;
+            token.comment_text.count = storage->data - token.comment_text.data;
         } break;
         default:
         {
             token.type = Token_unknown;
-            token.text.data = string_storage;
+            token.text.data = storage->data;
             for(c = reader->next(reader); c == '\n' || c == ' ' || c == '#'; c = reader->next(reader))
             {
-                ++string_storage;
+                ++storage->data;
+                --storage->count;
             }
-            token.text.count = string_storage - token.text.data;
+            token.text.count = storage->data - token.text.data;
         }
     }
     return token;

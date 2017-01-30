@@ -29,3 +29,9 @@ typedef struct
     s64 count;
     u8 *data;
 } string;
+
+#if 1
+#define ASSERT(Expression) if(!(Expression)) {*(int *)0 = 0;}
+#else
+#define ASSERT(Expression)
+#endif

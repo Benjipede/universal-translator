@@ -29,7 +29,7 @@ global:
 
 #include <stdlib.h>
 
-Space parse_space(Lexer lexer, Reader *reader, Stack *stack, Queue *que)
+Space parse_space(Lexer lexer, Reader *reader, string *storage, Stack *stack, Queue *que)
 {
     Token token;
     Space result;
@@ -40,7 +40,7 @@ Space parse_space(Lexer lexer, Reader *reader, Stack *stack, Queue *que)
     {
         if(token.type == Token_comment)  ++result.count;
         queue(que, token); // @Robustness: Handle adjacent whitespace tokens?
-        token = lexer(reader);
+        token = lexer(reader, storage);
     }
     push(stack, token);
     
@@ -80,11 +80,11 @@ Space parse_space(Lexer lexer, Reader *reader, Stack *stack, Queue *que)
     return result;
 }
 
-Global parse_global_space(Lexer lexer, Reader *reader, Stack *stack, Queue *que)
+Global parse_global_space(Lexer lexer, Reader *reader, string *storage, Stack *stack, Queue *que)
 {
     Global result;
     result.type = Global_space;
-    push(stack, lexer(reader));
-    result.space = parse_space(lexer, reader, stack, que);
+    push(stack, lexer(reader, storage));
+    result.space = parse_space(lexer, reader, storage, stack, que);
     return result;
 }

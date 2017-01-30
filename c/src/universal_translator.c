@@ -1,12 +1,3 @@
-#include <stdlib.h>
-#include <stdio.h>
-// TODO(casey): Complete assertion macro - don't worry everyone!
-#if 1
-#define ASSERT(Expression) if(!(Expression)) {*(int *)0 = 0;}
-#else
-#define ASSERT(Expression)
-#endif
-
 #include "lib.h"
 
 #include "reader.h"
@@ -19,17 +10,14 @@
 #include "delexer.h"
 #include "deparser.h"
 
-char buffer[0x10];
+#define STORAGE_SIZE 0x400*0x400 // 1 MB
+u8 storage_buffer[STORAGE_SIZE];
 
-char *to_c_string(string s)
-{
-    for(s64 index = 0; index < s.count; ++index)
-    {
-        buffer[index] = s.data[index];
-    }
-    buffer[s.count] = 0;
-    return buffer;
-}
+#define STACK_CAPACITY 0x100
+#define QUEUE_CAPACITY 0x100
+
+Token stack_buffer[STACK_CAPACITY];
+Token queue_buffer[QUEUE_CAPACITY];
 
 int main(int argc, char **argv)
 {
@@ -43,21 +31,23 @@ int main(int argc, char **argv)
     
     Stack stack;
     Queue que;
-#define STACK_CAPACITY 0x100
-#define QUEUE_CAPACITY 0x100
-    Token stack_buffer[STACK_CAPACITY];
-    Token queue_buffer[QUEUE_CAPACITY];
     
-    adData data;
+    string storage;
     
     if(argc < 3)
     {
         printf("Error expected two arguments.\n");
         return 0;
     }
+    storage.data = storage_buffer;
+    storage.count = STORAGE_SIZE;
+    
+    stack = make_stack(stack_buffer, STACK_CAPACITY);
+    que = make_queue(queue_buffer, QUEUE_CAPACITY);
+    
     char *infilename = argv[1];
     char *outfilename = argv[2];
-    reader = make_ascii_dumper(infilename, &data);
+    reader = make_ascii_dumper(infilename, &storage);
     writer = make_ascii_putter(outfilename);
     
     lexer = lex_simple;
@@ -66,12 +56,8 @@ int main(int argc, char **argv)
     delexer = delex_simple;
     deparser = deparse_simple;
     
-    stack.elements = stack_buffer;
-    stack.capacity = STACK_CAPACITY;
-    que.elements = queue_buffer;
-    que.capacity = QUEUE_CAPACITY;
     
-    Global ast = parser(lexer, &reader, &stack, &que);
+    Global ast = parser(lexer, &reader, &storage, &stack, &que);
     deparser(delexer, &writer, ast);
     
     return 0;

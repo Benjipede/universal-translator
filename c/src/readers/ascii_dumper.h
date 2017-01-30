@@ -77,23 +77,35 @@ u32 adpeek(Reader *reader, s64 count)
 }
 
 static
-void read_entire_file_into_memory(char *filename, adData *result)
+void *read_entire_file_and_create_addata(char *filename, string *storage)
 {
+    adData *result;
     FILE *file = fopen(filename, "rb");
     if(file)
     {
+        s64 filesize, storage_used;
+        
         fseek(file, 0, SEEK_END);
-        s64 filesize = ftell(file);
+        filesize = ftell(file);
         fseek(file, 0, SEEK_SET);
         
-        result->current = result->first = (u8 *)malloc(filesize);
-        result->last = result->first + fread(result->first, 1, filesize, file) - 1;
+        storage_used = filesize + sizeof(adData);
+        ASSERT(storage_used <= storage->count);
+        fread(storage->data, 1, filesize, file);
+        
+        result = (adData *)(storage->data + filesize);
+        result->current = result->first = storage->data;
+        result->last = result->first + filesize - 1;
+        
+        storage->count -= storage_used;
+        storage->data  += storage_used;
         
         fclose(file);
     }
+    return result;
 }
 
-Reader make_ascii_dumper(char *filename, adData *data)
+Reader make_ascii_dumper(char *filename, string *storage)
 {
     Reader reader;
     reader.curr = adcurr;
@@ -103,16 +115,9 @@ Reader make_ascii_dumper(char *filename, adData *data)
     reader.peek = adpeek;
     strengthen_reader(&reader);
     
-    reader.data = data;
-    read_entire_file_into_memory(filename, reader.data);
+    reader.data = read_entire_file_and_create_addata(filename, storage);
     
     return reader;
-}
-
-void destroy_ascii_dumper(Reader *reader)
-{
-    free(FIRST);
-    //free(reader->data); //add this when make_ascii_dumper takes an allocator
 }
 
 #undef DATA
