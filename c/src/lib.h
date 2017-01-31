@@ -39,6 +39,58 @@ string string_from_c_string(char *c)
     return result;
 }
 
+b8 is_string_equal_to_c_string(string text, char *c)
+{
+    for(s64 index = 0; index < text.count; ++index, ++c)
+    {
+        if(text.data[index] != *c)
+            return 0;
+    }
+    return 1;
+}
+
+string get_filename_basename(char *argument)
+{
+    string result;
+    result.data = (u8 *)argument;
+    for(; *argument && *argument != '.'; ++argument);
+    result.count = (u8 *)argument - result.data;
+    return result;
+}
+
+string get_filename_extension(char *argument)
+{
+    string result;
+    for(result.data = (u8 *)argument; *result.data; ++result.data)
+    {
+        if(*result.data == '.')
+        {
+            ++result.data;
+            break;
+        }
+    }
+    result.count = strlen((char *)result.data);
+    return result;
+}
+
+char *make_filename(string *storage, string basename, char *extension)
+{
+    char *result;
+    result = (char *)storage->data;
+    memcpy(storage->data, basename.data, basename.count);
+    storage->data   += basename.count;
+    storage->count  -= basename.count;
+    for(; *extension || *(extension - 1); ++extension)
+    {
+        *storage->data = (u8)*extension;
+        ++storage->data;
+        --storage->count;
+    }
+    return result;
+}
+
+#include <sys/stat.h>
+
 #if 1
 #define ASSERT(Expression) if(!(Expression)) {*(int *)0 = 0;}
 #else
