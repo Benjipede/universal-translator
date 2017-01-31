@@ -10,6 +10,8 @@
 #include "delexer.h"
 #include "deparser.h"
 
+#include "languages/languages.h"
+
 #define STORAGE_SIZE 0x400*0x400 // 1 MB
 u8 storage_buffer[STORAGE_SIZE];
 
