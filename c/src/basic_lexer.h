@@ -27,3 +27,18 @@ Token lex_whitespace(Reader *reader)
     
     return token;
 }
+
+Token lex_unknown(Reader *reader, string *storage, b8 (*still_unknown)(Reader *, string *))
+{
+    Token token;
+    u32 c;
+    token.type = Token_unknown;
+    token.text.data = storage->data;
+    for(c = reader->next(reader); c != '\n' || c != ' '|| still_unknown(reader, storage); c = reader->next(reader))
+    {
+        ++storage->data;
+        --storage->count;
+    }
+    token.text.count = storage->data - token.text.data;
+    return token;
+}

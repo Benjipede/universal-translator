@@ -1,3 +1,10 @@
+b8 still_unknown_simple(Reader *reader, string *storage)
+{
+    u32 c;
+    c = curr(reader);
+    return c != '#';
+}
+
 Token lex_simple(Reader *reader, string *storage)
 {
     Token token;
@@ -43,17 +50,7 @@ Token lex_simple(Reader *reader, string *storage)
             }
             token.comment.text.count = storage->data - token.comment.text.data;
         } break;
-        default:
-        {
-            token.type = Token_unknown;
-            token.text.data = storage->data;
-            for(c = reader->next(reader); c == '\n' || c == ' ' || c == '#'; c = reader->next(reader))
-            {
-                ++storage->data;
-                --storage->count;
-            }
-            token.text.count = storage->data - token.text.data;
-        }
+        default: token = lex_unknown(reader, storage, still_unknown_simple);
     }
     return token;
 }
