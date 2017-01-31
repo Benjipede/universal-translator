@@ -1,5 +1,21 @@
-void deparse_lambscript(Delexer delexer, Writer *writer, Global ast)
+void deparse_c(Delexer delexer, Writer *writer, Global ast)
 {
-    if(ast.type == Global_space)
-        deparse_space(delexer, writer, ast.space);
+    Token token;
+    switch(ast.type)
+    {
+        case Global_globals:
+        {
+            deparse_globals(deparse_c, delexer, writer, ast);
+        } break;
+        case Global_unknown_token:
+        {
+            token.type = Token_unknown;
+            token.text = ast.text;
+            delexer(writer, token);
+        } break;
+        case Global_space:
+        {
+            deparse_space(delexer, writer, ast.space);
+        } break;
+    }
 }

@@ -31,11 +31,11 @@ Token lex_whitespace(Reader *reader)
 Token lex_unknown(Reader *reader, string *storage, b8 (*still_unknown)(Reader *, string *))
 {
     Token token;
-    u32 c;
     token.type = Token_unknown;
     token.text.data = storage->data;
-    for(c = reader->next(reader); c != '\n' || c != ' '|| still_unknown(reader, storage); c = reader->next(reader))
+    for(u32 c = reader->curr(reader); c != eof && c != '\n' && c != ' '&& still_unknown(reader, storage); c = reader->next(reader))
     {
+        *storage->data = (char)c;
         ++storage->data;
         --storage->count;
     }

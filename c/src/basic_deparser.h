@@ -1,3 +1,11 @@
+void deparse_globals(Deparser deparser, Delexer delexer, Writer *writer, Global ast)
+{
+    for(s64 index = 0; index < ast.globals.count; ++index)
+    {
+        deparser(delexer, writer, ast.globals.elements[index]);
+    }
+}
+
 void deparse_space(Delexer delexer, Writer *writer, Space space)
 {
     Token token_whitespace, token_comment;

@@ -84,11 +84,14 @@ typedef struct Expression
 typedef enum
 {
     Global_none,
+    Global_globals,
     Global_unknown,
+    Global_unknown_token,
     Global_space,
     Global_language_specific,
     Global_expression,
     Global_Declaration,
+    Global_eof,
 } GlobalType;
 
 typedef struct Global
@@ -100,9 +103,9 @@ typedef struct Global
         Space space;
         struct
         {
-            struct Global *globals;
-            s64 global_count;
-        } array;
+            struct Global *elements;
+            s64 count;
+        } globals;
     };
     GlobalType type;
 } Global;

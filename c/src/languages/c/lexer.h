@@ -2,10 +2,10 @@ b8 still_unknown_c(Reader *reader, string *storage)
 {
     u32 c;
     c = curr(reader);
-    return c != ';';
+    return c != ';' && c != '/';
 }
 
-Token lex_lambscript(Reader *reader, string *storage)
+Token lex_c(Reader *reader, string *storage)
 {
     Token token;
     u32 c;

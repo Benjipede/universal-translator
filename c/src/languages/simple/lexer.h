@@ -11,7 +11,6 @@ Token lex_simple(Reader *reader, string *storage)
     u32 c;
     
     c = reader->curr(reader);
-    ASSERT(c != '\r');
     switch(c)
     {
         case eof:

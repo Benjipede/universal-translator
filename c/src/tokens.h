@@ -52,6 +52,11 @@ Stack make_stack(Token *elements, s64 capacity)
     return result;
 }
 
+b8 stack_is_empty(Stack stack)
+{
+    return stack.count == 0;
+}
+
 b8 push(Stack *stack, Token token)
 {
     if(stack->count >= stack->capacity)  return 0;
