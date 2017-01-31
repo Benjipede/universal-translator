@@ -17,5 +17,9 @@ void deparse_c(Delexer delexer, Writer *writer, Global ast)
         {
             deparse_space(delexer, writer, ast.space);
         } break;
+        default:
+        {
+            ASSERT(0)
+        }
     }
 }

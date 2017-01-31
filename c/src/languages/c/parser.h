@@ -6,7 +6,6 @@ Global parse_c(Lexer lexer, Reader *reader, string *storage, Stack *stack, Queue
     token = pop(stack);
     if(token.type == Token_none)
         token = lexer(reader, storage);
-
     switch(token.type)
     {
         case Token_eof:
@@ -15,7 +14,7 @@ Global parse_c(Lexer lexer, Reader *reader, string *storage, Stack *stack, Queue
         } break;
         case Token_unknown:
         {
-            ast.type = Global_unknown;
+            ast.type = Global_unknown_token;
             ast.text = token.text;
         } break;
         case Token_whitespace:
@@ -25,6 +24,10 @@ Global parse_c(Lexer lexer, Reader *reader, string *storage, Stack *stack, Queue
             ast.type = Global_space;
             ast.space = parse_space(lexer, reader, storage, stack, que);
         } break;
+        default:
+        {
+            ASSERT(0)
+        }
     }
     return ast;
 }

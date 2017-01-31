@@ -55,8 +55,8 @@ int main(int argc, char **argv)
     lexer = lex_simple;
     parser = parse_simple;
     
-    delexer = delex_simple;
-    deparser = deparse_simple;
+    delexer = delex_c;
+    deparser = deparse_c;
     
     {
         Global ast = parse_globals(parser, lexer, &reader, &storage, &stack, &que);

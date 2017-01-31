@@ -2,7 +2,6 @@ void delex_c(Writer *writer, Token token)
 {
     switch(token.type)
     {
-        string text;
         case Token_none:
         case Token_sof:
         case Token_eof:
@@ -12,22 +11,31 @@ void delex_c(Writer *writer, Token token)
             delex_whitespace(writer, token);
         } break;
         case Token_unknown:
-        token.type = Comment_multi;
-        text = token.text;
-        token.comment.text = text;
+        {
+            put_c_string(writer, "/* @Unknown token: ");
+            for(s64 index = 0; index < token.text.count; ++index)
+            {
+                put(writer, token.text.data[index]);
+            }
+            put_c_string(writer, "*/");
+        } break;
         case Token_comment:
         {
-            writer->put(writer, '#');
+            put(writer, '/');
+            if(token.comment.type == Comment_single)
+                put(writer, '/');
+            else
+                put(writer, '*');
             for(s64 index = 0; index < token.comment.text.count; ++index)
             {
-                writer->put(writer, token.comment.text.data[index]);
+                put(writer, token.comment.text.data[index]);
             }
             if(token.comment.type == Comment_multi)
-                writer->put(writer, '#');
+                put_c_string(writer, "*/");
         } break;
         default:
         {
-            //??
+            ASSERT(0)
         }
     }
 }
