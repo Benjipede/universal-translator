@@ -11,6 +11,10 @@ Token lex_simple(Reader *reader, string *storage)
         {
             token.type = Token_eof;
         } break;
+        case sof:
+        {
+            token.type = Token_sof;
+        } break;
         case '\n':
         case ' ':
         {
@@ -19,17 +23,17 @@ Token lex_simple(Reader *reader, string *storage)
         case '#':
         {
             token.type = Token_comment;
-            token.comment_text.data = storage->data;
+            token.comment.text.data = storage->data;
             for(c = reader->next(reader); ; c = reader->next(reader))
             {
                 if(c == eof || c == '\n')
                 {
-                    token.comment_type = Comment_single;
+                    token.comment.type = Comment_single;
                     break;
                 }
                 if(c == '#')
                 {
-                    token.comment_type = Comment_multi;
+                    token.comment.type = Comment_multi;
                     reader->next(reader);
                     break;
                 }
@@ -37,7 +41,7 @@ Token lex_simple(Reader *reader, string *storage)
                 ++storage->data;
                 --storage->count;
             }
-            token.comment_text.count = storage->data - token.comment_text.data;
+            token.comment.text.count = storage->data - token.comment.text.data;
         } break;
         default:
         {

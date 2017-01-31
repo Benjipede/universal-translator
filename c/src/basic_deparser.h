@@ -11,8 +11,8 @@ void deparse_space(Delexer delexer, Writer *writer, Space space)
     for(s64 index = 0; index < space.count; ++index)
     {
         {
-            token_comment.comment_type = space.comments[index].type;
-            token_comment.comment_text = space.comments[index].text;
+            token_comment.comment.type = space.comments[index].type;
+            token_comment.comment.text = space.comments[index].text;
             delexer(writer, token_comment);
         }
         {

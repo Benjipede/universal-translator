@@ -60,8 +60,8 @@ Space parse_space(Lexer lexer, Reader *reader, string *storage, Stack *stack, Qu
     
     for(s64 index = 0; token.type == Token_comment; ++index)
     {
-        result.comments[index].type = token.comment_type;
-        result.comments[index].text = token.comment_text;
+        result.comments[index].type = token.comment.type;
+        result.comments[index].text = token.comment.text;
         token = dequeue(que);
         if(token.type == Token_whitespace)
         {

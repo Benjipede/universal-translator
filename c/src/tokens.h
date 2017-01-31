@@ -21,9 +21,9 @@ typedef struct Token {
         string text;
         struct
         {
-            string comment_text;
-            CommentType comment_type;
-        };
+            string text;
+            CommentType type;
+        } comment;
         struct
         {
             s64 newline_count, space_count;

@@ -14,15 +14,15 @@ void delex_lambscript(Writer *writer, Token token)
         case Token_unknown:
         token.type = Comment_multi;
         text = token.text;
-        token.comment_text = text;
+        token.comment.text = text;
         case Token_comment:
         {
             writer->put(writer, '#');
-            for(s64 index = 0; index < token.comment_text.count; ++index)
+            for(s64 index = 0; index < token.comment.text.count; ++index)
             {
-                writer->put(writer, token.comment_text.data[index]);
+                writer->put(writer, token.comment.text.data[index]);
             }
-            if(token.comment_type == Comment_multi)
+            if(token.comment.type == Comment_multi)
                 writer->put(writer, '#');
         } break;
         default:
