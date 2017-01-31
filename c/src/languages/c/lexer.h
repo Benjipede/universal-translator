@@ -19,29 +19,76 @@ Token lex_lambscript(Reader *reader, string *storage)
         {
             token = lex_whitespace(reader);
         } break;
-        case '//': token.comment.type = Comment_single;
-        case '/*':
+        case '/':
         {
-            token.type = Token_comment;
-            token.comment.text.data = storage->data;
-            for(c = reader->next(reader); ; c = reader->next(reader))
+            c = next(reader);
+            switch(c)
             {
-                if(c == eof || c == '\n')
+                case '/':
                 {
+                    token.type = Token_comment;
                     token.comment.type = Comment_single;
-                    break;
-                }
-                if(c == '#')
+                    token.comment.text.data = storage->data;
+                    for(c = reader->next(reader); ; c = reader->next(reader))
+                    {
+                        if(c == eof || c == '\n')
+                        {
+                            token.comment.type = Comment_single;
+                            break;
+                        }
+                        *storage->data = (u8)c;
+                        ++storage->data;
+                        --storage->count;
+                    }
+                    token.comment.text.count = storage->data - token.comment.text.data;
+                } break;
+                case '*':
                 {
+                    string *token_text;
+                    token.type = Token_comment;
                     token.comment.type = Comment_multi;
-                    reader->next(reader);
-                    break;
+                    { // in case of an error
+                        storage->data[0] = '/';
+                        storage->data[1] = '*';
+                        storage->data += 2;
+                    }
+                    token.comment.text.data = storage->data;
+                    for(c = reader->next(reader); ; c = reader->next(reader))
+                    {
+                        if(c == eof) // How should lexical errors be handled?
+                        {
+                            token.type = Token_error;
+                            string temp = token.comment.text;
+                            temp.data -= 2;
+                            token.text = temp;
+                            token_text = &token.text;
+                            break;
+                        }
+                        if(c == '*')
+                        {
+                            c = next(reader);
+                            if(c == '/')
+                            {
+                                reader->next(reader);
+                                token_text = &token.comment.text;
+                                break;
+                            }                                
+                            *storage->data = '*';
+                            ++storage->data;
+                            --storage->count;
+                        }
+                        *storage->data = (u8)c;
+                        ++storage->data;
+                        --storage->count;
+                    }
+                    token_text->count = storage->data - token_text->data;
+                } break;
+                default:
+                {
+                    token.type = Token_unsupported;
+                    token.text = string_from_c_string("Division is not yet supported.");
                 }
-                *storage->data = (u8)c;
-                ++storage->data;
-                --storage->count;
             }
-            token.comment.text.count = storage->data - token.comment.text.data;
         } break;
         default:
         {

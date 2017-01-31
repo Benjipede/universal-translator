@@ -30,6 +30,15 @@ typedef struct
     u8 *data;
 } string;
 
+#include <string.h>
+string string_from_c_string(char *c)
+{
+    string result;
+    result.data = (u8 *)c;
+    result.count = strlen(c);
+    return result;
+}
+
 #if 1
 #define ASSERT(Expression) if(!(Expression)) {*(int *)0 = 0;}
 #else

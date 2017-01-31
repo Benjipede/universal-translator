@@ -6,6 +6,8 @@ typedef enum
 
 typedef enum {
     Token_none,
+    Token_error,
+    Token_unsupported,
     Token_unknown,
     Token_whitespace,
     Token_comment,
