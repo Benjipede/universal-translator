@@ -114,8 +114,6 @@ char *make_filename(string *storage, string basename, char *extension)
     return result;
 }
 
-#include <sys/stat.h>
-
 #if 1
 #define ASSERT(Expression) if(!(Expression)) {*(int *)0 = 0;}
 #else
