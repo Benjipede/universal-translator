@@ -2,7 +2,7 @@ b8 still_unknown_c(Reader *reader, string *storage)
 {
     u32 c;
     c = curr(reader);
-    return c != ';' && c != '/';
+    return !is_alpha(c) && c != '_' && c != ';' && c != '/';
 }
 
 Token lex_c(Reader *reader, string *storage)

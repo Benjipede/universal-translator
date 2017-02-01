@@ -106,14 +106,14 @@ b8 handle_commandline_arguments(int argc, char **argv, string *storage, char **s
         string extension = get_filename_extension(*source);
         if(extension.count)
         {
-            if(source_language >= 0)
-            {
-                source_language = find_language_by_extension(extension);
-            }
             if(source_language < 0)
             {
-                printf("Source language could not be inferred from source file extension '%s'.\n", (char *)extension.data); // null termination is assumed
-                return 0;
+                source_language = find_language_by_extension(extension);
+                if(source_language < 0)
+                {
+                    printf("Source language could not be inferred from source file extension '%s'.\n", (char *)extension.data); // null termination is assumed
+                    return 0;
+                }
             }
         }
         else if(source_language >= 0)
@@ -160,14 +160,14 @@ b8 handle_commandline_arguments(int argc, char **argv, string *storage, char **s
             string extension = get_filename_extension(*destination);
             if(extension.count)
             {
-                if(target_language >= 0)
+                if(target_language < 0)
                 {
                     target_language = find_language_by_extension(extension);
-                }
-                if(source_language < 0)
-                {
-                    printf("Target language could not be inferred from destination file extension '%s'.\n", (char *)extension.data); // null termination is assumed
-                    return 0;
+                    if(source_language < 0)
+                    {
+                        printf("Target language could not be inferred from destination file extension '%s'.\n", (char *)extension.data); // null termination is assumed
+                        return 0;
+                    }
                 }
             }
             else if(target_language >= 0)

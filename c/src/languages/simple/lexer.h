@@ -2,7 +2,7 @@ b8 still_unknown_simple(Reader *reader, string *storage)
 {
     u32 c;
     c = curr(reader);
-    return c != '#';
+    return !is_alpha(c) && c != '_' && c != '#';
 }
 
 Token lex_simple(Reader *reader, string *storage)
