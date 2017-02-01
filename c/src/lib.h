@@ -41,9 +41,9 @@ string string_from_c_string(char *c)
 
 b8 is_string_equal_to_c_string(string text, char *c)
 {
-    for(s64 index = 0; index < text.count; ++index, ++c)
+    for(s64 index = 0; index < text.count; ++index)
     {
-        if(text.data[index] != *c)
+        if(text.data[index] != c[index])
             return 0;
     }
     return 1;
@@ -79,7 +79,10 @@ char *make_filename(string *storage, string basename, char *extension)
     result = (char *)storage->data;
     memcpy(storage->data, basename.data, basename.count);
     storage->data   += basename.count;
-    storage->count  -= basename.count;
+    storage->count  -= basename.count+1;
+    *storage->data = (u8)'.';
+    ++storage->data;
+    
     for(; *extension || *(extension - 1); ++extension)
     {
         *storage->data = (u8)*extension;

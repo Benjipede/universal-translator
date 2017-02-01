@@ -136,11 +136,11 @@ b8 handle_commandline_arguments(int argc, char **argv, string *storage, char **s
         }
         else if(*lexer == lex_c)
         {
-            if(infer_extensions)  *source = make_filename(storage, get_filename_basename(*source), ".c");
+            if(infer_extensions)  *source = make_filename(storage, get_filename_basename(*source), "c");
         }
         else if(*lexer == lex_simple)
         {
-            if(infer_extensions)  *source = make_filename(storage, get_filename_basename(*source), ".sim");
+            if(infer_extensions)  *source = make_filename(storage, get_filename_basename(*source), "sim");
         }
         else
         {
@@ -167,11 +167,11 @@ b8 handle_commandline_arguments(int argc, char **argv, string *storage, char **s
         {
             if(*delexer == delex_c)
             {
-                *destination = make_filename(storage, get_filename_basename(*source), ".c");
+                *destination = make_filename(storage, get_filename_basename(*source), "c");
             }
             else if(*delexer == delex_simple)
             {
-                *destination = make_filename(storage, get_filename_basename(*source), ".sim");
+                *destination = make_filename(storage, get_filename_basename(*source), "sim");
             }
             else
             {
@@ -200,11 +200,11 @@ b8 handle_commandline_arguments(int argc, char **argv, string *storage, char **s
             }
             else if(*delexer == delex_c)
             {
-                if(infer_extensions)  *destination = make_filename(storage, get_filename_basename(*destination), ".c");
+                if(infer_extensions)  *destination = make_filename(storage, get_filename_basename(*destination), "c");
             }
             else if(*delexer == delex_simple)
             {
-                if(infer_extensions)  *destination = make_filename(storage, get_filename_basename(*destination), ".sim");
+                if(infer_extensions)  *destination = make_filename(storage, get_filename_basename(*destination), "sim");
             }
             else
             {
