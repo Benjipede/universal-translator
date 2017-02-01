@@ -1,6 +1,6 @@
 Global parse_simple(Lexer lexer, Reader *reader, string *storage, Stack *stack, Queue *que)
 {
-    Global ast;
+    Global ast = {0};
     Token token;
     
     token = pop(stack);

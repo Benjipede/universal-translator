@@ -1,6 +1,6 @@
 @echo off
 
-set WarningFlags= -WX -W4 -wd4100 -wd4189 -wd4201 -wd4996 -wd4701 -wd4703
+set WarningFlags= -WX -W4 -wd4100 -wd4189 -wd4201 -wd4996
 
 if not exist ..\bin mkdir ..\bin
 pushd ..\bin

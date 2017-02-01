@@ -75,7 +75,7 @@ u32 adpeek(Reader *reader, s64 count)
     else
         return (u32)*destination;
 }
-
+/*
 static
 void *read_entire_file_and_create_addata(char *filename, string *storage)
 {
@@ -104,7 +104,7 @@ void *read_entire_file_and_create_addata(char *filename, string *storage)
     }
     return result;
 }
-
+*/
 Reader make_ascii_dumper(char *filename, string *storage)
 {
     Reader reader;
@@ -115,7 +115,30 @@ Reader make_ascii_dumper(char *filename, string *storage)
     reader.peek = adpeek;
     strengthen_reader(&reader);
     
-    reader.data = read_entire_file_and_create_addata(filename, storage);
+    {
+        FILE *file = fopen(filename, "rb");
+        if(file)
+        {
+            s64 filesize, storage_used;
+            
+            fseek(file, 0, SEEK_END);
+            filesize = ftell(file);
+            fseek(file, 0, SEEK_SET);
+            
+            storage_used = filesize + sizeof(adData);
+            ASSERT(storage_used <= storage->count);
+            fread(storage->data, 1, filesize, file);
+            
+            reader.data = (storage->data + filesize);
+            ((adData *)reader.data)->current = ((adData *)reader.data)->first = storage->data;
+            ((adData *)reader.data)->last = ((adData *)reader.data)->first + filesize - 1;
+            
+            storage->count -= storage_used;
+            storage->data  += storage_used;
+            
+            fclose(file);
+        }
+    }
     
     return reader;
 }
