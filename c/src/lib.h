@@ -83,12 +83,16 @@ char *make_filename(string *storage, string basename, char *extension)
     *storage->data = (u8)'.';
     ++storage->data;
     
-    for(; *extension || *(extension - 1); ++extension)
+    for(; *extension; ++extension)
     {
         *storage->data = (u8)*extension;
         ++storage->data;
         --storage->count;
     }
+    *storage->data = 0;
+    ++storage->data;
+    --storage->count;
+    
     return result;
 }
 
