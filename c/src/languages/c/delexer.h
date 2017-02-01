@@ -12,12 +12,12 @@ void delex_c(Writer *writer, Token token)
         } break;
         case Token_unknown:
         {
-            put_c_string(writer, "/* @Unknown token: ");
+            put_cstring(writer, "/* @Unknown token: ");
             for(s64 index = 0; index < token.text.count; ++index)
             {
                 put(writer, token.text.data[index]);
             }
-            put_c_string(writer, " */");
+            put_cstring(writer, " */");
         } break;
         case Token_comment:
         {
@@ -31,7 +31,7 @@ void delex_c(Writer *writer, Token token)
                 put(writer, token.comment.text.data[index]);
             }
             if(token.comment.type == Comment_multi)
-                put_c_string(writer, "*/");
+                put_cstring(writer, "*/");
         } break;
         case Token_identifier:
         {
