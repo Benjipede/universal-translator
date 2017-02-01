@@ -90,7 +90,7 @@ Token lex_c(Reader *reader, string *storage)
                 default:
                 {
                     token.type = Token_unsupported;
-                    token.text = string_from_c_string("Division is not yet supported.");
+                    token.text = string_from_cstring("Division is not yet supported.");
                 }
             }
         } break;

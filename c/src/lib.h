@@ -49,7 +49,7 @@ b8 is_alphanumeric(u32 c)
 }
 
 #include <string.h>
-string string_from_c_string(char *c)
+string string_from_cstring(char *c)
 {
     string result;
     result.data = (u8 *)c;
@@ -57,7 +57,7 @@ string string_from_c_string(char *c)
     return result;
 }
 
-b8 is_string_equal_to_c_string(string text, char *c)
+b8 is_string_equal_to_cstring(string text, char *c)
 {
     for(s64 index = 0; index < text.count; ++index)
     {
@@ -113,6 +113,8 @@ char *make_filename(string *storage, string basename, char *extension)
     
     return result;
 }
+
+#define array_count(Array) (sizeof(Array) / sizeof((Array)[0]))
 
 #if 1
 #define ASSERT(Expression) if(!(Expression)) {*(int *)0 = 0;}

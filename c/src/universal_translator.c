@@ -22,25 +22,25 @@ Token stack_buffer[STACK_CAPACITY];
 Token queue_buffer[QUEUE_CAPACITY];
 
 b8 handle_commandline_arguments(int argc, char **argv, string *storage, char **source, char **destination, Reader *reader, Lexer *lexer, Parser *parser, Deparser *deparser, Delexer *delexer, Writer *writer)
-{   
+{
+    s64 source_language, target_language;
+    
     b8 infer_extensions;
-    char *description;
-    infer_extensions = 1;
-    description = "usage:\nuniversal-translater source.c destination.sim [options]\nuniversal-translater source.c [options]\nuniversal-translater source [options]\n\noptions\n    -from [language]    Set source languange. Otherwise source language is inferred from source file extension.\n    -to [language]    Set target languange. Otherwise source language is inferred from target file extension.\n    -no_ext    Dont infer extensions for filenames given without extension.\n";
+    char *description = "usage:\nuniversal-translater source.c destination.sim [options]\nuniversal-translater source.c [options]\nuniversal-translater source [options]\n\noptions\n    -from [language]\n        Set source languange. Otherwise source language is inferred from source file extension.\n    -to [language]\n        Set target languange. Otherwise source language is inferred from target file extension.\n    -no_ext\n        Dont infer extensions for filenames given without extension.\n";
+    
     if(argc == 1)
     {
         printf(description);
         return 0;
     }
     
-    *lexer = NULL;
-    *parser = NULL;
-    
-    *delexer = NULL;
-    *deparser = NULL;
+    source_language = -1;
+    target_language = -1;
     
     *source = NULL;
     *destination = NULL;
+    
+    infer_extensions = 1;
     
     for(s64 index = 1; index < argc; ++index)
     {
@@ -52,44 +52,30 @@ b8 handle_commandline_arguments(int argc, char **argv, string *storage, char **s
             {
                 ++index;
                 if(index == argc)
+                {
+                    printf("-from was given as last argument.\n");
                     return 0;
+                }
                 argument = argv[index];
-                if(!strcmp(argument, "c"))
+                source_language = find_language_by_name(argument);
+                if(source_language < 0)
                 {
-                    *lexer = lex_c;
-                    *parser = parse_c;
-                }
-                else if(!strcmp(argument, "simple"))
-                {
-                    *lexer = lex_simple;
-                    *parser = parse_simple;
-                }
-                else
-                {
-                    printf("Unknown language '%s'.\n", argument);
-                    return 0;
+                    printf("%s is not a supported language.\n", argument);
                 }
             }
             else if(!strcmp(argument, "to"))
             {
                 ++index;
                 if(index == argc)
+                {
+                    printf("-to was given as last argument.\n");
                     return 0;
+                }
                 argument = argv[index];
-                if(!strcmp(argument, "c"))
+                target_language = find_language_by_name(argument);
+                if(target_language < 0)
                 {
-                    *delexer = delex_c;
-                    *deparser = deparse_c;
-                }
-                else if(!strcmp(argument, "simple"))
-                {
-                    *delexer = delex_simple;
-                    *deparser = deparse_simple;
-                }
-                else
-                {
-                    printf("Unknown language '%s'.\n", argument);
-                    return 0;
+                    printf("%s is not a supported language.\n", argument);
                 }
             }
             else if(!strcmp(argument, "no_ext"))
@@ -120,27 +106,20 @@ b8 handle_commandline_arguments(int argc, char **argv, string *storage, char **s
         string extension = get_filename_extension(*source);
         if(extension.count)
         {
-            if(!*lexer)
+            if(source_language >= 0)
             {
-                if(is_string_equal_to_c_string(extension, "c"))
-                {
-                    *lexer = lex_c;
-                    *parser = parse_c;
-                }
-                else if(is_string_equal_to_c_string(extension, "sim"))
-                {
-                    *lexer = lex_simple;
-                    *parser = parse_simple;
-                }
+                source_language = find_language_by_extension(extension);
+            }
+            if(source_language < 0)
+            {
+                printf("Source language could not be inferred from source file extension '%s'.\n", (char *)extension.data); // null termination is assumed
+                return 0;
             }
         }
-        else if(*lexer == lex_c)
+        else if(source_language >= 0)
         {
-            if(infer_extensions)  *source = make_filename(storage, get_filename_basename(*source), "c");
-        }
-        else if(*lexer == lex_simple)
-        {
-            if(infer_extensions)  *source = make_filename(storage, get_filename_basename(*source), "sim");
+            if(infer_extensions && get_language_array[source_language]().extension_count)
+                *source = make_filename(storage, get_filename_basename(*source), get_language_array[source_language]().extensions[0]);
         }
         else
         {
@@ -165,13 +144,10 @@ b8 handle_commandline_arguments(int argc, char **argv, string *storage, char **s
         
         if(!*destination)
         {
-            if(*delexer == delex_c)
+            if(target_language >= 0)
             {
-                *destination = make_filename(storage, get_filename_basename(*source), "c");
-            }
-            else if(*delexer == delex_simple)
-            {
-                *destination = make_filename(storage, get_filename_basename(*source), "sim");
+                if(infer_extensions && get_language_array[target_language]().extension_count)
+                    *destination = make_filename(storage, get_filename_basename(*source), get_language_array[target_language]().extensions[0]);
             }
             else
             {
@@ -184,27 +160,20 @@ b8 handle_commandline_arguments(int argc, char **argv, string *storage, char **s
             string extension = get_filename_extension(*destination);
             if(extension.count)
             {
-                if(!*delexer)
+                if(target_language >= 0)
                 {
-                    if(is_string_equal_to_c_string(extension, "c"))
-                    {
-                        *delexer = delex_c;
-                        *deparser = deparse_c;
-                    }
-                    else if(is_string_equal_to_c_string(extension, "sim"))
-                    {
-                        *delexer = delex_simple;
-                        *deparser = deparse_simple;
-                    }
+                    target_language = find_language_by_extension(extension);
+                }
+                if(source_language < 0)
+                {
+                    printf("Target language could not be inferred from destination file extension '%s'.\n", (char *)extension.data); // null termination is assumed
+                    return 0;
                 }
             }
-            else if(*delexer == delex_c)
+            else if(target_language >= 0)
             {
-                if(infer_extensions)  *destination = make_filename(storage, get_filename_basename(*destination), "c");
-            }
-            else if(*delexer == delex_simple)
-            {
-                if(infer_extensions)  *destination = make_filename(storage, get_filename_basename(*destination), "sim");
+                if(infer_extensions && get_language_array[target_language]().extension_count)
+                    *destination = make_filename(storage, get_filename_basename(*destination), get_language_array[target_language]().extensions[0]);
             }
             else
             {
@@ -213,7 +182,12 @@ b8 handle_commandline_arguments(int argc, char **argv, string *storage, char **s
             }
         }
     }
-        
+    
+    *lexer = get_language_array[source_language]().lexer;
+    *parser = get_language_array[source_language]().parser;
+    
+    *delexer = get_language_array[target_language]().delexer;
+    *deparser = get_language_array[target_language]().deparser;
     
     *reader = make_ascii_dumper(*source, storage);
     *writer = make_ascii_putter(*destination);
