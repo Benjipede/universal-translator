@@ -17,7 +17,7 @@ void delex_simple(Writer *writer, Token token)
             {
                 put(writer, token.text.data[index]);
             }
-            put(writer, '#');
+            put_c_string(writer, " #");
         } break;
         case Token_comment:
         {
