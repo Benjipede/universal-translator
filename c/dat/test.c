@@ -1,4 +1,4 @@
 //
-/*sadf*/  /* @Unknown token: 9_9var*/ //  adsf
+/*sadf*/  _9var; //  adsf
 
    //asfd sad
