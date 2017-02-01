@@ -37,8 +37,7 @@ Global parse_c(Lexer lexer, Reader *reader, string *storage, Stack *stack, Queue
             else
             {
                 ast.type = Global_unsupported;
-                printf("Not yet!");
-                ASSERT(0)
+                ast.text = string_from_c_string("Only variables are supported as toplevel expressions.");
             }
         } break;
         default:

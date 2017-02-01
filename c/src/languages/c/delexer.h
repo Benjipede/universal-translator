@@ -10,9 +10,18 @@ void delex_c(Writer *writer, Token token)
         {
             delex_whitespace(writer, token);
         } break;
+        case Token_unsupported:
+        {
+            put_cstring(writer, "/* @Unsupported: ");
+            for(s64 index = 0; index < token.text.count; ++index)
+            {
+                put(writer, token.text.data[index]);
+            }
+            put_cstring(writer, " */");
+        } break;
         case Token_unknown:
         {
-            put_cstring(writer, "/* @Unknown token: ");
+            put_cstring(writer, "/* @Unknown: ");
             for(s64 index = 0; index < token.text.count; ++index)
             {
                 put(writer, token.text.data[index]);

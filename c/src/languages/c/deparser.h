@@ -7,6 +7,12 @@ void deparse_c(Delexer delexer, Writer *writer, Global ast)
         {
             deparse_globals(deparse_c, delexer, writer, ast);
         } break;
+        case Global_unsupported:
+        {
+            token.type = Token_unsupported;
+            token.text = ast.text;
+            delexer(writer, token);
+        } break;
         case Global_unknown_token:
         {
             token.type = Token_unknown;
@@ -30,8 +36,8 @@ void deparse_c(Delexer delexer, Writer *writer, Global ast)
             else
             {
                 token.type = Token_unsupported;
-                printf("Not yet!");
-                ASSERT(0)
+                token.text = ast.text;
+                delexer(writer, token);
             }
         } break;
         default:
