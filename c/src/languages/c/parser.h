@@ -24,6 +24,23 @@ Global parse_c(Lexer lexer, Reader *reader, string *storage, Stack *stack, Queue
             ast.type = Global_space;
             ast.space = parse_space(lexer, reader, storage, stack, que);
         } break;
+        case Token_identifier:
+        {
+            Token token_next;
+            token_next = lexer(reader, storage);
+            if(token_next.type == Token_semicolon)
+            {
+                ast.type = Global_expression;
+                ast.expression.type = Expression_variable;
+                ast.expression.text = token.text;
+            }
+            else
+            {
+                ast.type = Global_unsupported;
+                printf("Not yet!");
+                ASSERT(0)
+            }
+        } break;
         default:
         {
             ASSERT(0)

@@ -30,6 +30,24 @@ typedef struct
     u8 *data;
 } string;
 
+b8 is_alpha(u32 c)
+{
+    b8 result = ('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z');
+    return result;
+}
+
+b8 is_digit(u32 c)
+{
+    b8 result = ('0' <= c && c <= '9');
+    return result;
+}
+
+b8 is_alphanumeric(u32 c)
+{
+    b8 result = is_alpha(c) || is_digit(c);
+    return result;
+}
+
 #include <string.h>
 string string_from_c_string(char *c)
 {

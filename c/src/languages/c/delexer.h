@@ -33,6 +33,17 @@ void delex_c(Writer *writer, Token token)
             if(token.comment.type == Comment_multi)
                 put_c_string(writer, "*/");
         } break;
+        case Token_identifier:
+        {
+            for(s64 index = 0; index < token.text.count; ++index)
+            {
+                put(writer, token.text.data[index]);
+            }
+        } break;
+        case Token_semicolon:
+        {
+            put(writer, ';');
+        } break;
         default:
         {
             ASSERT(0)

@@ -13,6 +13,7 @@ typedef enum {
     Token_comment,
     Token_identifier,
     Token_literal,
+    Token_semicolon,
     Token_sof,
     Token_eof,
 } TokenType;

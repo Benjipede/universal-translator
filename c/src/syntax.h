@@ -46,7 +46,7 @@ typedef enum
     Expression_none,
     Expression_unknown,
     Expression_language_specific,
-    Expression_identifier,
+    Expression_variable,
     Expression_procedure_lambda,
     Expression_procedure_call,
     Expression_function_lambda,
@@ -85,12 +85,13 @@ typedef enum
 {
     Global_none,
     Global_globals,
+    Global_unsupported,
     Global_unknown,
     Global_unknown_token,
     Global_space,
     Global_language_specific,
     Global_expression,
-    Global_Declaration,
+    Global_declaration,
     Global_eof,
 } GlobalType;
 

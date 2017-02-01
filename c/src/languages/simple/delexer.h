@@ -29,6 +29,13 @@ void delex_simple(Writer *writer, Token token)
             if(token.comment.type == Comment_multi)
                 put(writer, '#');
         } break;
+        case Token_identifier:
+        {
+            for(s64 index = 0; index < token.text.count; ++index)
+            {
+                put(writer, token.text.data[index]);
+            }
+        } break;
         default:
         {
             ASSERT(0)

@@ -39,10 +39,7 @@ Token lex_c(Reader *reader, string *storage)
                     for(c = reader->next(reader); ; c = reader->next(reader))
                     {
                         if(c == eof || c == '\n')
-                        {
-                            token.comment.type = Comment_single;
                             break;
-                        }
                         *storage->data = (u8)c;
                         ++storage->data;
                         --storage->count;
@@ -97,7 +94,35 @@ Token lex_c(Reader *reader, string *storage)
                 }
             }
         } break;
-        default: token = lex_unknown(reader, storage, still_unknown_c);
+        case ';':
+        {
+            next(reader);
+            token.type = Token_semicolon;
+        } break;
+        default:
+        {
+            if(is_alpha(c) || c == '_')
+            {
+                token.type = Token_identifier;
+                token.text.data = storage->data;
+                
+                *storage->data = (u8)c;
+                ++storage->data;
+                --storage->count;
+                
+                for(c = reader->next(reader); is_alphanumeric(c) || c == '_'; c = reader->next(reader))
+                {
+                    *storage->data = (u8)c;
+                    ++storage->data;
+                    --storage->count;
+                }
+                token.text.count = storage->data - token.text.data;
+            }
+            else
+            {
+                token = lex_unknown(reader, storage, still_unknown_c);
+            }
+        }
     }
     return token;
 }

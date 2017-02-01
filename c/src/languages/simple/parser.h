@@ -24,6 +24,12 @@ Global parse_simple(Lexer lexer, Reader *reader, string *storage, Stack *stack, 
             ast.type = Global_space;
             ast.space = parse_space(lexer, reader, storage, stack, que);
         } break;
+        case Token_identifier:
+        {
+            ast.type = Global_expression;
+            ast.expression.type = Expression_variable;
+            ast.expression.text = token.text;
+        } break;
         default:
         {
             ASSERT(0)
