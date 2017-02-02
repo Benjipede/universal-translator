@@ -13,6 +13,20 @@ typedef struct
     s64 capacity;
 } PointerArray;
 
+PointerArray make_pointer_array(s64 capacity)
+{
+    PointerArray array;
+    array.count = 0;
+    array.capacity = 0;
+    
+    u8 **memory = (u8 **)malloc(capacity);
+    ASSERT(memory);
+    array.data = memory;
+    array.capacity = capacity;
+    
+    return array;
+}
+
 void reserve_pointers(PointerArray *array, s64 amount)
 {
     if(array->capacity < amount)
@@ -43,15 +57,6 @@ u8 *pop_pointer(PointerArray *array) {
     u8 *result = array->data[array->count-1];
     array->count -= 1;
 
-    return result;
-}
-
-PointerArray make_pointer_array(s64 capacity)
-{
-    PointerArray result;
-    result.count = 0;
-    result.capacity = 0;
-    reserve_pointers(&result, capacity);
     return result;
 }
 

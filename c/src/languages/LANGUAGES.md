@@ -29,7 +29,7 @@ languages.h acts as the bottleneck of the "languages" folder. It defines some ty
 
 ### Subfolders
 
-Each subfolder represents a programming language. Each of them contains at least the files lang.h, lexer.h, parser.h, deparser.h, and delexer.h.
+Each subfolder represents a programming language. Each of them contains at least the files lang.h, lexer.h, parser.h, deparser.h, and delexer.h. A subfolder name may not contain uppercase letters.
 
 Example subfolder:
 > name/:

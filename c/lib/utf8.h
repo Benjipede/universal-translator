@@ -77,20 +77,22 @@ typedef struct
     u8 *data;
 } string;
 
-void to_upper(string text)
+string to_upper(string text)
 {
     for(s64 index = 0; index < text.count; ++index)
     {
         text.data[index] = (u8)to_uppercase(text.data[index]);
     }
+    return text;
 }
 
-void to_lower(string text)
+string to_lower(string text)
 {
     for(s64 index = 0; index < text.count; ++index)
     {
         text.data[index] = (u8)to_lowercase(text.data[index]);
     }
+    return text;
 }
 
 
@@ -115,6 +117,18 @@ string copy_string_from_cstring(u8 *ptr, char *c)
     return result;
 }
 
+string copy_string(u8 *ptr, string text)
+{
+    string result;
+    result.data = ptr;
+    for(s64 index = 0; index < text.count; ++index)
+    {
+        result.data[index] = text.data[index];
+    }
+    result.count = text.count;
+    return result;
+}
+
 b8 is_string_equal_to_cstring(string text, char *c)
 {
     for(s64 index = 0; index < text.count; ++index)
@@ -125,6 +139,15 @@ b8 is_string_equal_to_cstring(string text, char *c)
     return 1;
 }
 
+b8 begins_with(char *c, char *d)
+{
+    for(s64 index = 0; d[index]; ++index)
+    {
+        if(c[index] != d[index])
+            return 0;
+    }
+    return 1;
+}
 
 string get_filename_basename(char *argument)
 {

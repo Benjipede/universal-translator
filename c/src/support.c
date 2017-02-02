@@ -1,30 +1,57 @@
 #include "lib.h"
 
-//#include <memory.h>
-
-#define STORAGE_SIZE 0x400*0x400 // 1 MB
-u8 storage_buffer[STORAGE_SIZE];
-
 int main(int argc, char **argv)
 {
-    string storage;
-    storage.data = storage_buffer;
-    storage.count = STORAGE_SIZE;
+    Pool pool = make_default_pool();
+    FILE *langfile, *toolfile;
+    
+    char *initial_path = "w:/universal-translator/c/src/languages/";
     
     if(argc > 1)
     {
-        string path = copy_string_from_cstring(storage.data, argv[1]);
-        storage.data    += path.count;
-        storage.count   -= path.count;
-        to_lower(path);
-        printf("path: %s\n", path.data);
-        if(argc > 2)
+        char *argument = argv[1];
+        string path;
+        path.data = get_memory_align(&pool, strlen(initial_path) + strlen(argument) + strlen("/deparser.h") + 1, 1);
+        path = copy_string_from_cstring(path.data, initial_path);
+        path.count += copy_string(path.data + path.count, to_lower(string_from_cstring(argument))).count + 1;
+        path.data[path.count-1] = '/';
+        
+        string langname = path;
+        langname.count += copy_string_from_cstring(path.data + path.count, "LANG.md").count;
+        langname.data[langname.count] = 0;
+        langfile = fopen((char *)langname.data, "rb");
+        if(!langfile)
         {
-            
+            perror((char *)langname.data);
+            return 1;
+        }
+        
+        string toolname = path;
+        toolname.count += copy_string_from_cstring(path.data + path.count, "lexer.h").count;
+        toolname.data[toolname.count] = 0;
+        toolfile = fopen((char *)toolname.data, "rb");
+        if(!toolfile)
+        {
+            perror((char *)toolname.data);
+            return 1;
+        }
+        
+        {
+            string string_to_match = string_from_cstring("SUPPORT");
+            for(u8 match = 0; match < string_to_match.count; )
+            {
+                int c = fgetc(toolfile);
+                if(c < 0)
+                {
+                    printf("No support information in %s\n", toolname.data);
+                    return 0;
+                }
+                if(c == string_to_match.data[match])
+                    ++match;
+            }
+            printf("FOUND!\n");
             return 0;
         }
-        printf("All tool types are not yet supported. Use: support language [ tool... ]");
-        return 0;
     }
     
     printf("General case not yet supported. Use: support language [ tool... ]");

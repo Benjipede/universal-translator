@@ -23,11 +23,18 @@ typedef struct
 
 Pool make_pool(s64 memblock_size, s64 out_of_band_size, u64 alignment)
 {
-    Pool result;
-    result.memblock_size = memblock_size;
-    result.out_of_band_size = out_of_band_size;
-    result.alignment = alignment;
-    return result;
+    Pool pool;
+    pool.memblock_size = memblock_size;
+    pool.out_of_band_size = out_of_band_size;
+    pool.alignment = alignment;
+    
+    pool.unused_memblocks = make_pointer_array(8);
+    pool.used_memblocks = make_pointer_array(8);
+    pool.out_of_band_allocations = make_pointer_array(8);
+    
+    pool.bytes_left = 0;
+    
+    return pool;
 }
 
 Pool make_default_pool()
@@ -52,7 +59,7 @@ void cycle_new_block(Pool *pool) {
     pool->current_memblock = new_block;
 }
 
-void *get(Pool *pool, s64 nbytes) {
+void *get_memory_align(Pool *pool, s64 nbytes, u64 alignment) {
     s64 extra = pool->alignment - (nbytes % pool->alignment); 
     nbytes += extra; 
 
@@ -76,8 +83,13 @@ void *get(Pool *pool, s64 nbytes) {
     return retval; 
 }
 
+void *get_memory(Pool *pool, s64 nbytes)
+{
+    return get_memory_align(pool, nbytes, pool->alignment);
+}
 
-void reset(Pool *pool) {
+
+void reset_pool(Pool *pool) {
     if(pool->current_memblock) {
         add_pointer(&pool->unused_memblocks, pool->current_memblock);
 	    pool->current_memblock = NULL;
@@ -93,8 +105,8 @@ void reset(Pool *pool) {
 }
 
 
-void release(Pool *pool) {
-    reset(pool);
+void release_pool(Pool *pool) {
+    reset_pool(pool);
 
     for(s64 index = 0; index < pool->unused_memblocks.count; ++index)
         free(pool->unused_memblocks.data[index]);
