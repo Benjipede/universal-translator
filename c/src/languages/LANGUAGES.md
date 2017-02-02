@@ -4,7 +4,7 @@ Follow these guidelines when you want to change anything in this folder.
 
 ## Contents
 
-- [Priorities]
+- [#Priorities]
 - [Structure]
   - [Subfolders]
   - ["lang.h"]
@@ -34,7 +34,8 @@ Each subfolder represents a programming language. Each of them contains at least
 Example subfolder:
 > name/:
 
-> lang.h  lexer.h  parser.h  deparser.h  delexer.h
+> lang.h
+> lexer.h  parser.h  deparser.h  delexer.h
 
 ### "lang.h"
 
