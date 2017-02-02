@@ -10,6 +10,7 @@ typedef struct
     Delexer delexer;
 } Language;
 
+#define SUPPORT(...)
 #include "c/lang.h"
 #include "simple/lang.h"
 

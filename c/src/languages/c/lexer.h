@@ -5,6 +5,7 @@ b8 still_unknown_c(Reader *reader, string *storage)
     return !is_alpha(c) && c != '_' && c != ';' && c != '/';
 }
 
+SUPPORT(line comment, multiline comment, identifier, semicolon)
 Token lex_c(Reader *reader, string *storage)
 {
     Token token;

@@ -1,3 +1,15 @@
+//
+// Standard Library includes
+//
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+//
+// Making nicer types
+//
+
 #include <stdint.h>
 #include <stddef.h>
 #include <limits.h>
@@ -23,16 +35,57 @@ typedef s64 b64;
 typedef uintptr_t umm;
 typedef intptr_t smm;
 
+//
+// The following should handle utf8, but does not for now
+//
 
-typedef struct
+// characters
+
+u32 char_to_lower(u32 c)
 {
-    s64 count;
-    u8 *data;
-} string;
+    u32 result;
+    if('A' <= c && c <= 'Z')
+        result = c + ('a' - 'A');
+    else
+        result = c;
+    return result;
+}
+
+b8 is_uppercase(u32 c)
+{
+    b8 result = 'A' <= c && c <= 'Z';
+    return result;
+}
+
+b8 is_lowercase(u32 c)
+{
+    b8 result = 'a' <= c && c <= 'z';
+    return result;
+}
 
 b8 is_alpha(u32 c)
 {
-    b8 result = ('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z');
+    b8 result = is_uppercase(c) || is_lowercase(c);
+    return result;
+}
+
+u32 to_uppercase(u32 c)
+{
+    u32 result;
+    if(is_lowercase(c))
+        result = c - ('a' - 'A');
+    else
+        result = c;
+    return result;
+}
+
+u32 to_lowercase(u32 c)
+{
+    u32 result;
+    if(is_uppercase(c))
+        result = c + ('a' - 'A');
+    else
+        result = c;
     return result;
 }
 
@@ -48,12 +101,49 @@ b8 is_alphanumeric(u32 c)
     return result;
 }
 
-#include <string.h>
+// strings
+
+typedef struct
+{
+    s64 count;
+    u8 *data;
+} string;
+
+void to_upper(string text)
+{
+    for(s64 index = 0; index < text.count; ++index)
+    {
+        text.data[index] = (u8)to_uppercase(text.data[index]);
+    }
+}
+
+void to_lower(string text)
+{
+    for(s64 index = 0; index < text.count; ++index)
+    {
+        text.data[index] = (u8)to_lowercase(text.data[index]);
+    }
+}
+
+
+
 string string_from_cstring(char *c)
 {
     string result;
     result.data = (u8 *)c;
     result.count = strlen(c);
+    return result;
+}
+
+string copy_string_from_cstring(u8 *ptr, char *c)
+{
+    string result;
+    result.data = ptr;
+    result.count = 0;
+    while(*c)
+    {
+        result.data[result.count++] = *(c++);
+    }
     return result;
 }
 
@@ -66,6 +156,7 @@ b8 is_string_equal_to_cstring(string text, char *c)
     }
     return 1;
 }
+
 
 string get_filename_basename(char *argument)
 {
