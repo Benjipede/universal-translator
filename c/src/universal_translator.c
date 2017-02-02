@@ -26,11 +26,50 @@ b8 handle_commandline_arguments(int argc, char **argv, string *storage, char **s
     s64 source_language, target_language;
     
     b8 infer_extensions;
-    char *description = "usage:\nuniversal-translater source.c destination.sim [options]\nuniversal-translater source.c [options]\nuniversal-translater source [options]\n\noptions\n    -from [language]\n        Set source languange. Otherwise source language is inferred from source file extension.\n    -to [language]\n        Set target languange. Otherwise source language is inferred from target file extension.\n    -no_ext\n        Dont infer extensions for filenames given without extension.\n";
     
     if(argc == 1)
     {
+        char *description =
+        "usage: unitrl \"source filename\"\n"
+        "              \"destination filename\" [ option... ]\n"
+        "       unitrl \"source filename\"\n"
+        "              -to \"target language\" [ option... ]\n"
+        "       unitrl \"source basename\"\n"
+        "              -from \"source language\" -to \"target language\" [ option... ]\n"
+        "       unitrl -help\n"
+        "\n"
+        "options:\n"
+        "   -from [language]    Set source languange\n"
+        "   -to [language]      Set target languange\n"
+        "   -no_ext             Disable extension-inference for filenames\n";
         printf(description);
+        return 0;
+    }
+    if(argc == 2)
+    {
+        char *argument = argv[2];
+        if(!strcmp(argument, "-help"))
+        {
+            char *verbose_description =
+            "usage: unitrl \"source filename\"\n"
+            "              \"destination filename\" [ option... ]\n"
+            "       unitrl \"source filename\"\n"
+            "              -to \"target language\" [ option... ]\n"
+            "       unitrl \"source basename\"\n"
+            "              -from \"source language\" -to \"target language\" [ option... ]\n"
+            "       unitrl -help\n"
+            "\n"
+            "options:\n"
+            "   -from [language]    Set source languange. Otherwise source language is\n"
+            "                       inferred from source file extension.\n"
+            "   -to [language]      Set target languange.\n"
+            "                       Otherwise source language is inferred from target file\n"
+            "                       extension.\n"
+            "   -no_ext             Disable extension-inference for filenames.\n";
+            printf(verbose_description);
+            return 0;
+        }
+        printf("Unknown argument %s\n", argument);
         return 0;
     }
     
