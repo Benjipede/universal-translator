@@ -12,9 +12,9 @@ Follow these guidelines when you want to change anything in this folder.
   - [parser.h](#parserh)
   - [deparser.h](#deparserh)
   - [delexer.h](#delexerh)
-- [Extending support of a language](#extending-support-of-a-language)
-- [Add support for new language](#add-support-for-new-language)
+- [Extend support of a language](#extend-support-of-a-language)
   - [Create a new tool for an existing language](#create-a-new-tool-for-an-existing-language)
+- [Add support for new language](#add-support-for-new-language)
 
 ## Priorities
 
@@ -29,7 +29,7 @@ languages.h acts as the bottleneck of the "languages" folder. It defines some ty
 
 ### Subfolders
 
-Each subfolder represents a programming language. Each of them contains at least the files lang.h, lexer.h, parser.h, deparser.h and delexer.h.
+Each subfolder represents a programming language. Each of them contains at least the files lang.h, lexer.h, parser.h, deparser.h, and delexer.h.
 
 Example subfolder:
 > name/:
@@ -38,7 +38,7 @@ Example subfolder:
 
 ### lang.h
 
-lang.h acts as the bottleneck of its subfolder. It includes the files lexer.h, parser.h, deparser.h and delexer.h. Furthermore, it defines the `Language get_language_*()` function for the language which returns some information about the language, which at the time of this writing is the name of the language, possible extensions and the default lexer, parser, deparser and delexer (see example below). The first extension returned is used for extension-inference by the command-line interface.
+lang.h acts as the bottleneck of its subfolder. It includes [the other files](subfolders). Furthermore, it defines the `Language get_language_*()` function for the language which returns some information about the language, which at the time of this writing is the name of the language, possible extensions and the default lexer, parser, deparser and delexer (see example below). The first extension returned is used for extension-inference by the command-line interface.
 
 Example lang.h:
 ```c
@@ -90,24 +90,22 @@ Example delexer.h:
 
 **The structure is still subject to change. If you have advice on the structure please let me know.**
 
-## Extending support of a language
+## Extend support of a language
 
+We call the aforementioned procedures in [lexer.h](#lexerh), [parser.h](#parserh), [deparser.h](#deparserh), and [delexer.h](#delexerh) tools.
 
+### Create a new tool for an existing language
+
+Maybe you simply want to create a lexer, parser, deparser or delexer. Then just follow step 3, 4, 5, or 6 from the list [below](#add-support-for-new-language) with 'name' appended with a descriptive identifier.
 
 ## Add support for new language
 
 When you want to add support for language "name" go through the following steps.
 
 1. Create the subfolder "name", preferably in lowercase letters.
-2. In the newly created folder make the files lang.h, lexer.h, parser.h, deparser.h, delexer.h.
+2. In the newly created folder make the files lang.h, lexer.h, parser.h, deparser.h, and delexer.h.
 3. In lexer.h put a procedure `Token lex_name(Reader *, string *)` (see [lexer.h](#lexerh)).
 4. In parser.h put a procedure `Global parser_name(Lexer, Reader *, string *, Stack *, Queue *)`  (see [parser.h](#parserh)).
 5. In deparser.h put a procedure `void deparser_name(Delexer, Writer *, Global)`  (see [deparser.h](#deparserh)).
 6. In delexer.h put a procedure `void delexer_name(Writer *, Token)`  (see [delexer.h](#delexerh)).
 7. In lang.h put includes to the other files and a procedure `Language get_language_name()`  (see [lang.h](#langh)).
-
-### Create a new tool for an existing language
-
-Maybe you simply want to create a lexer, parser, deparser or delexer. Then just follow step 3, 4, 5 or 6 of the above list with 'name' appended with a descriptive identifier.
-
-
