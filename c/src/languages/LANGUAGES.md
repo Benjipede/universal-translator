@@ -3,8 +3,6 @@
 Follow these guidelines when you want to change anything in this folder.
 
 ## Contents
-(\[\w+\])([^\(](#\w+\])([^\())
-\1\2
 
 - [Priorities](#priorities)
 - [Structure](#structure)
