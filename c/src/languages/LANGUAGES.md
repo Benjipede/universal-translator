@@ -9,7 +9,7 @@ Follow these guidelines when you want to change anything in this folder.
 - [Priorities](#priorities)
 - [Structure](#structure)
   - [Subfolders](#subfolders)
-  - [lang.h](#lang-h)
+  - [lang.h](#langh)
   - [lexer.h](#lexer.h)
   - [parser.h](#parser.h)
   - [deparser.h](#deparser.h)
