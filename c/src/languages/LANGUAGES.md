@@ -25,14 +25,14 @@ Follow these guidelines when you want to change anything in this folder.
 
 **Warning: The structure is subject to change, so expect that your contributions will need to be updated.**
 
-"languages.h" acts as the bottleneck of the "languages" folder. It defines some types, includes "*/lang.h" for every subfolder "*", defines an array of ´Language get_language_*()´ functions included from subfolders.
+"languages.h" acts as the bottleneck of the "languages" folder. It defines some types, includes "*/lang.h" for every subfolder "*", defines an array of Â´Language get_language_*()Â´ functions included from subfolders.
 
 ### Subfolders
 
 Each subfolder represents a programming language. Each of them contains at least the files "lang.h", "lexer.h", "parser.h", "deparser.h" and "delexer.h".
 
 Example subfolder:
-> "name/":
+> name/:
 >     lang.h
 >     lexer.h
 >     parser.h
@@ -41,14 +41,14 @@ Example subfolder:
 
 ### "lang.h"
 
-"lang.h" acts as the bottleneck of its subfolder. It includes the files "lexer.h", "parser.h", "deparser.h" and "delexer.h". Furthermore, it defines the ´Language get_language_*()´ function for the language which returns some information about the language, which at the time of this writing is the name of the language, possible extensions and the default lexer, parser, deparser and delexer (see example below). The first extension returned is used for extension-inference by the command-line interface.
+"lang.h" acts as the bottleneck of its subfolder. It includes the files "lexer.h", "parser.h", "deparser.h" and "delexer.h". Furthermore, it defines the Â´Language get_language_*()Â´ function for the language which returns some information about the language, which at the time of this writing is the name of the language, possible extensions and the default lexer, parser, deparser and delexer (see example below). The first extension returned is used for extension-inference by the command-line interface.
 
 Example "lang.h":
-´´´c-cpp
-#include "lexer.h"
-#include "delexer.h"
-#include "parser.h"
-#include "deparser.h"
+Â´Â´Â´c-cpp
+\#include "lexer.h"
+\#include "delexer.h"
+\#include "parser.h"
+\#include "deparser.h"
 
 Language get_language_name()
 {
@@ -65,29 +65,29 @@ Language get_language_name()
     
     return language;
 }
-´´´
+Â´Â´Â´
 
 ### "lexer.h"
 
-"lexer.h" defines one or more procedures of the form ´Token lex_name(Reader *reader, string *storage)´. ´lex_name´ reads source code through ´reader´ (see "..\reader.h") and returns a token. It uses ´storage´ to store strings and other variable-length data.
+"lexer.h" defines one or more procedures of the form Â´Token lex_name(Reader *reader, string *storage)Â´. Â´lex_nameÂ´ reads source code through Â´readerÂ´ (see "..\reader.h") and returns a token. It uses Â´storageÂ´ to store strings and other variable-length data.
 
 Example "lexer.h":
 
 ### "parser.h"
 
-"parser.h" defines one or more procedures of the form ´Global parse_name(Lexer lexer, Reader *reader, string *storage)´. ´parse_name´ lexes tokens by calling ´lexer(reader, storage)´ and returns an abstract syntax tree. Like ´lex_name´ it also uses ´storage´ to store data.
+"parser.h" defines one or more procedures of the form Â´Global parse_name(Lexer lexer, Reader *reader, string *storage)Â´. Â´parse_nameÂ´ lexes tokens by calling Â´lexer(reader, storage)Â´ and returns an abstract syntax tree. Like Â´lex_nameÂ´ it also uses Â´storageÂ´ to store data.
 
 Example "parser.h":
 
 ### "deparser.h"
 
-"deparser.h" defines one or more procedures of the form ´void deparse_name(Delexer delexer, Writer *writer, Global ast)´. ´deparse_name´ breaks down ´ast´ into the tokens that would naturally make up such an abstract syntax tree in the specific language and passes each of them to ´delexer´ together with ´writer´.
+"deparser.h" defines one or more procedures of the form Â´void deparse_name(Delexer delexer, Writer *writer, Global ast)Â´. Â´deparse_nameÂ´ breaks down Â´astÂ´ into the tokens that would naturally make up such an abstract syntax tree in the specific language and passes each of them to Â´delexerÂ´ together with Â´writerÂ´.
 
 Example "deparser.h":
 
 ### "delexer.h"
 
-"delexer.h" defines one or more procedures of the form ´void delex_name(Writer *writer, Token token)´. ´delex_name´ breaks down ´token´ into characters would naturally make up such a token in the specific language and writes them through ´writer´.
+"delexer.h" defines one or more procedures of the form Â´void delex_name(Writer *writer, Token token)Â´. Â´delex_nameÂ´ breaks down Â´tokenÂ´ into characters would naturally make up such a token in the specific language and writes them through Â´writerÂ´.
 
 Example "delexer.h":
 
@@ -103,11 +103,11 @@ When you want to add support for language "name" go through the following steps.
 
 1. Create the subfolder "name", preferably in lowercase letters.
 2. In the newly created folder make the files "lang.h", "lexer.h", "parser.h", "deparser.h", "delexer.h".
-3. In lexer.h put a procedure ´Token lex_name(Reader *, string *)´ (see ["lexer.h"]).
-4. In parser.h put a procedure ´Global parser_name(Lexer, Reader *, string *, Stack *, Queue *)´  (see ["parser.h"]).
-5. In deparser.h put a procedure ´void deparser_name(Delexer, Writer *, Global)´  (see ["deparser.h"]).
-6. In delexer.h put a procedure ´void delexer_name(Writer *, Token)´  (see ["delexer.h"]).
-7. In "lang.h" put includes to the other files and a procedure ´Language get_language_name()´  (see ["lang.h"]).
+3. In lexer.h put a procedure Â´Token lex_name(Reader *, string *)Â´ (see ["lexer.h"]).
+4. In parser.h put a procedure Â´Global parser_name(Lexer, Reader *, string *, Stack *, Queue *)Â´  (see ["parser.h"]).
+5. In deparser.h put a procedure Â´void deparser_name(Delexer, Writer *, Global)Â´  (see ["deparser.h"]).
+6. In delexer.h put a procedure Â´void delexer_name(Writer *, Token)Â´  (see ["delexer.h"]).
+7. In "lang.h" put includes to the other files and a procedure Â´Language get_language_name()Â´  (see ["lang.h"]).
 
 ### Create a new tool for an existing language
 
