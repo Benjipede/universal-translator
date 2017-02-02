@@ -8,15 +8,15 @@ Follow these guidelines when you want to change anything in this folder.
 
 - [Priorities](#priorities)
 - [Structure](#structure)
-  - [Subfolders](#Subfolders)
-  - ["lang.h"](#"lang.h")
+  - [Subfolders](#subfolders)
+  - ["lang.h"](#lang.h)
   - ["lexer.h"](#"lexer.h")
   - ["parser.h"](#"parser.h")
   - ["deparser.h"](#"deparser.h")
   - ["delexer.h"](#"delexer.h")
-- [Extending support of a language](#Extending support of a language)
-- [Add support for new language](#Add support for new language)
-  - [Create a new tool for an existing language](#Create a new tool for an existing language)
+- [Extending support of a language](#extending-support-of-a-language)
+- [Add support for new language](#add-support-for-new-language)
+  - [Create a new tool for an existing language](#create-a-new-tool-for-an-existing-language)
 
 ## Priorities
 
