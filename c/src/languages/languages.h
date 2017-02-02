@@ -14,7 +14,7 @@ typedef struct
 #include "simple/lang.h"
 
 typedef Language (*GetLanguage)();
-GetLanguage get_language_array[] = {get_language_c, get_language_simple};
+const GetLanguage get_language_array[] = {get_language_c, get_language_simple};
 
 s64 find_language_by_name(char *name)
 {

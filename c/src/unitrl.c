@@ -24,7 +24,6 @@ Token queue_buffer[QUEUE_CAPACITY];
 b8 handle_commandline_arguments(int argc, char **argv, string *storage, char **source, char **destination, Reader *reader, Lexer *lexer, Parser *parser, Deparser *deparser, Delexer *delexer, Writer *writer)
 {
     s64 source_language, target_language;
-    
     b8 infer_extensions;
     
     if(argc == 1)
@@ -45,31 +44,25 @@ b8 handle_commandline_arguments(int argc, char **argv, string *storage, char **s
         printf(description);
         return 0;
     }
-    if(argc == 2)
+    if(!strcmp(argv[1], "-help"))
     {
-        char *argument = argv[2];
-        if(!strcmp(argument, "-help"))
-        {
-            char *verbose_description =
-            "usage: unitrl \"source filename\"\n"
-            "              \"destination filename\" [ option... ]\n"
-            "       unitrl \"source filename\"\n"
-            "              -to \"target language\" [ option... ]\n"
-            "       unitrl \"source basename\"\n"
-            "              -from \"source language\" -to \"target language\" [ option... ]\n"
-            "       unitrl -help\n"
-            "\n"
-            "options:\n"
-            "   -from [language]    Set source languange. Otherwise source language is\n"
-            "                       inferred from source file extension.\n"
-            "   -to [language]      Set target languange.\n"
-            "                       Otherwise source language is inferred from target file\n"
-            "                       extension.\n"
-            "   -no_ext             Disable extension-inference for filenames.\n";
-            printf(verbose_description);
-            return 0;
-        }
-        printf("Unknown argument %s\n", argument);
+        char *verbose_description =
+        "usage: unitrl \"source filename\"\n"
+        "              \"destination filename\" [ option... ]\n"
+        "       unitrl \"source filename\"\n"
+        "              -to \"target language\" [ option... ]\n"
+        "       unitrl \"source basename\"\n"
+        "              -from \"source language\" -to \"target language\" [ option... ]\n"
+        "       unitrl -help\n"
+        "\n"
+        "options:\n"
+        "   -from [language]    Set source languange. Otherwise source language is\n"
+        "                       inferred from source file extension.\n"
+        "   -to [language]      Set target languange.\n"
+        "                       Otherwise source language is inferred from target file\n"
+        "                       extension.\n"
+        "   -no_ext             Disable extension-inference for filenames.\n";
+        printf(verbose_description);
         return 0;
     }
     
