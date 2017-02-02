@@ -7,7 +7,7 @@ Follow these guidelines when you want to change anything in this folder.
 \1\2
 
 - [Priorities](#Priorities)
-- [Structure](#Structure)
+- [Structure](##Structure)
   - [Subfolders](#Subfolders)
   - ["lang.h"](#"lang.h")
   - ["lexer.h"](#"lexer.h")
