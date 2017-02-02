@@ -32,7 +32,7 @@ Follow these guidelines when you want to change anything in this folder.
 Each subfolder represents a programming language. Each of them contains at least the files "lang.h", "lexer.h", "parser.h", "deparser.h" and "delexer.h".
 
 Example subfolder:
-> name/:
+> name/
 >     lang.h
 >     lexer.h
 >     parser.h
