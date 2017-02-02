@@ -3,7 +3,9 @@
 
 #include "nicetypes.h"
 
-// characters
+//
+// Characters
+//
 
 u32 char_to_lower(u32 c)
 {
@@ -65,7 +67,9 @@ b8 is_alphanumeric(u32 c)
     return result;
 }
 
-// strings
+//
+// Strings
+//
 
 typedef struct
 {

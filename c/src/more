@@ -1,0 +1,150 @@
+unitrl.c
+w:\universal-translator\c\lib\pointer_array.h(21): error C2220: warning treated as error - no 'object' file generated
+w:\universal-translator\c\lib\pointer_array.h(21): warning C4013: 'reserve_bytes' undefined; assuming extern returning int
+w:\universal-translator\c\lib\pointer_array.h(36): error C2143: syntax error: missing ')' before '*'
+w:\universal-translator\c\lib\pointer_array.h(36): error C2143: syntax error: missing '{' before '*'
+w:\universal-translator\c\lib\pointer_array.h(36): warning C4431: missing type specifier - int assumed. Note: C no longer supports default-int
+w:\universal-translator\c\lib\pointer_array.h(36): error C2371: 'u8': redefinition; different basic types
+w:\universal-translator\c\lib\nicetypes.h(9): note: see declaration of 'u8'
+w:\universal-translator\c\lib\pointer_array.h(36): error C2143: syntax error: missing ';' before '*'
+w:\universal-translator\c\lib\pointer_array.h(36): warning C4218: nonstandard extension used: must specify at least a storage class or a type
+w:\universal-translator\c\lib\pointer_array.h(36): error C2059: syntax error: ')'
+w:\universal-translator\c\lib\pointer_array.h(37): warning C4431: missing type specifier - int assumed. Note: C no longer supports default-int
+w:\universal-translator\c\lib\pointer_array.h(37): error C2054: expected '(' to follow 'ptr'
+w:\universal-translator\c\lib\pool.h(41): error C2065: 'alignment': undeclared identifier
+w:\universal-translator\c\lib\pool.h(45): error C2065: 'memblock_size': undeclared identifier
+w:\universal-translator\c\lib\pool.h(47): warning C4013: 'add_pointer' undefined; assuming extern returning int
+w:\universal-translator\c\lib\pool.h(52): warning C4013: 'cycle_new_block' undefined; assuming extern returning int
+w:\universal-translator\c\lib\pool.h(65): warning C4013: 'reset' undefined; assuming extern returning int
+w:\universal-translator\c\lib\pool.h(71): error C2371: 'reset': redefinition; different basic types
+w:\universal-translator\c\lib\pool.h(72): error C2065: 'current_memblock': undeclared identifier
+w:\universal-translator\c\lib\pool.h(77): error C2088: '<': illegal for struct
+w:\universal-translator\c\lib\pool.h(81): error C2088: '<': illegal for struct
+w:\universal-translator\c\lib\pool.h(91): error C2371: 'cycle_new_block': redefinition; different basic types
+w:\universal-translator\c\lib\pool.h(92): error C2061: syntax error: identifier 'current_memblock'
+w:\universal-translator\c\lib\pool.h(97): error C2059: syntax error: 'if'
+w:\universal-translator\c\lib\pool.h(99): error C2059: syntax error: 'else'
+w:\universal-translator\c\lib\pool.h(103): error C2143: syntax error: missing '{' before '->'
+w:\universal-translator\c\lib\pool.h(103): error C2059: syntax error: '->'
+w:\universal-translator\c\lib\pool.h(104): error C2143: syntax error: missing '{' before '->'
+w:\universal-translator\c\lib\pool.h(104): error C2059: syntax error: '->'
+w:\universal-translator\c\lib\pool.h(105): error C2143: syntax error: missing '{' before '->'
+w:\universal-translator\c\lib\pool.h(105): error C2059: syntax error: '->'
+w:\universal-translator\c\lib\pool.h(106): error C2059: syntax error: '}'
+w:\universal-translator\c\src\reader.h(21): warning C4431: missing type specifier - int assumed. Note: C no longer supports default-int
+w:\universal-translator\c\src\reader.h(21): warning C4218: nonstandard extension used: must specify at least a storage class or a type
+w:\universal-translator\c\src\reader.h(23): error C2143: syntax error: missing ')' before '*'
+w:\universal-translator\c\src\reader.h(23): error C2143: syntax error: missing '{' before '*'
+w:\universal-translator\c\src\reader.h(23): error C2059: syntax error: ')'
+w:\universal-translator\c\src\reader.h(23): warning C4431: missing type specifier - int assumed. Note: C no longer supports default-int
+w:\universal-translator\c\src\reader.h(23): error C2054: expected '(' to follow 'reader'
+w:\universal-translator\c\src\reader.h(25): error C2143: syntax error: missing ')' before '*'
+w:\universal-translator\c\src\reader.h(25): error C2143: syntax error: missing '{' before '*'
+w:\universal-translator\c\src\reader.h(25): error C2059: syntax error: ')'
+w:\universal-translator\c\src\reader.h(25): warning C4431: missing type specifier - int assumed. Note: C no longer supports default-int
+w:\universal-translator\c\src\reader.h(25): error C2054: expected '(' to follow 'reader'
+w:\universal-translator\c\src\reader.h(26): error C2143: syntax error: missing ')' before '*'
+w:\universal-translator\c\src\reader.h(26): error C2143: syntax error: missing '{' before '*'
+w:\universal-translator\c\src\reader.h(26): warning C4431: missing type specifier - int assumed. Note: C no longer supports default-int
+w:\universal-translator\c\src\reader.h(26): error C2371: 's64': redefinition; different basic types
+w:\universal-translator\c\lib\nicetypes.h(16): note: see declaration of 's64'
+w:\universal-translator\c\src\reader.h(26): error C2146: syntax error: missing ';' before identifier 'amount'
+w:\universal-translator\c\src\reader.h(26): warning C4218: nonstandard extension used: must specify at least a storage class or a type
+w:\universal-translator\c\src\reader.h(26): error C2059: syntax error: ')'
+w:\universal-translator\c\src\reader.h(26): error C2054: expected '(' to follow 'amount'
+w:\universal-translator\c\src\reader.h(28): error C2143: syntax error: missing ')' before '*'
+w:\universal-translator\c\src\reader.h(28): error C2143: syntax error: missing '{' before '*'
+w:\universal-translator\c\src\reader.h(28): error C2059: syntax error: ')'
+w:\universal-translator\c\src\reader.h(28): warning C4431: missing type specifier - int assumed. Note: C no longer supports default-int
+w:\universal-translator\c\src\reader.h(28): error C2054: expected '(' to follow 'reader'
+w:\universal-translator\c\src\reader.h(29): error C2143: syntax error: missing ')' before '*'
+w:\universal-translator\c\src\reader.h(29): error C2143: syntax error: missing '{' before '*'
+w:\universal-translator\c\src\reader.h(29): warning C4431: missing type specifier - int assumed. Note: C no longer supports default-int
+w:\universal-translator\c\src\reader.h(29): error C2371: 's64': redefinition; different basic types
+w:\universal-translator\c\lib\nicetypes.h(16): note: see declaration of 's64'
+w:\universal-translator\c\src\reader.h(29): error C2146: syntax error: missing ';' before identifier 'amount'
+w:\universal-translator\c\src\reader.h(29): warning C4218: nonstandard extension used: must specify at least a storage class or a type
+w:\universal-translator\c\src\reader.h(29): error C2059: syntax error: ')'
+w:\universal-translator\c\src\reader.h(29): error C2054: expected '(' to follow 'amount'
+w:\universal-translator\c\src\reader.h(31): error C2143: syntax error: missing ')' before '*'
+w:\universal-translator\c\src\reader.h(31): error C2143: syntax error: missing '{' before '*'
+w:\universal-translator\c\src\reader.h(31): warning C4431: missing type specifier - int assumed. Note: C no longer supports default-int
+w:\universal-translator\c\src\reader.h(31): error C2371: 's64': redefinition; different basic types
+w:\universal-translator\c\lib\nicetypes.h(16): note: see declaration of 's64'
+w:\universal-translator\c\src\reader.h(31): error C2146: syntax error: missing ';' before identifier 'amount'
+w:\universal-translator\c\src\reader.h(31): warning C4218: nonstandard extension used: must specify at least a storage class or a type
+w:\universal-translator\c\src\reader.h(31): error C2059: syntax error: ')'
+w:\universal-translator\c\src\reader.h(31): error C2054: expected '(' to follow 'amount'
+w:\universal-translator\c\src\reader.h(33): error C2143: syntax error: missing ')' before '*'
+w:\universal-translator\c\src\reader.h(33): error C2143: syntax error: missing '{' before '*'
+w:\universal-translator\c\src\reader.h(33): warning C4431: missing type specifier - int assumed. Note: C no longer supports default-int
+w:\universal-translator\c\src\reader.h(33): error C2371: 's64': redefinition; different basic types
+w:\universal-translator\c\lib\nicetypes.h(16): note: see declaration of 's64'
+w:\universal-translator\c\src\reader.h(33): error C2146: syntax error: missing ';' before identifier 'amount'
+w:\universal-translator\c\src\reader.h(33): warning C4218: nonstandard extension used: must specify at least a storage class or a type
+w:\universal-translator\c\src\reader.h(33): error C2059: syntax error: ')'
+w:\universal-translator\c\src\reader.h(33): error C2054: expected '(' to follow 'amount'
+w:\universal-translator\c\src\reader.h(34): error C2143: syntax error: missing ')' before '*'
+w:\universal-translator\c\src\reader.h(34): error C2143: syntax error: missing '{' before '*'
+w:\universal-translator\c\src\reader.h(34): warning C4431: missing type specifier - int assumed. Note: C no longer supports default-int
+w:\universal-translator\c\src\reader.h(34): error C2371: 's64': redefinition; different basic types
+w:\universal-translator\c\lib\nicetypes.h(16): note: see declaration of 's64'
+w:\universal-translator\c\src\reader.h(34): error C2146: syntax error: missing ';' before identifier 'amount'
+w:\universal-translator\c\src\reader.h(34): warning C4218: nonstandard extension used: must specify at least a storage class or a type
+w:\universal-translator\c\src\reader.h(34): error C2059: syntax error: ')'
+w:\universal-translator\c\src\reader.h(34): error C2054: expected '(' to follow 'amount'
+w:\universal-translator\c\src\reader.h(35): error C2143: syntax error: missing ')' before '*'
+w:\universal-translator\c\src\reader.h(35): error C2143: syntax error: missing '{' before '*'
+w:\universal-translator\c\src\reader.h(35): warning C4431: missing type specifier - int assumed. Note: C no longer supports default-int
+w:\universal-translator\c\src\reader.h(35): error C2371: 's64': redefinition; different basic types
+w:\universal-translator\c\lib\nicetypes.h(16): note: see declaration of 's64'
+w:\universal-translator\c\src\reader.h(35): error C2146: syntax error: missing ';' before identifier 'amount'
+w:\universal-translator\c\src\reader.h(35): warning C4218: nonstandard extension used: must specify at least a storage class or a type
+w:\universal-translator\c\src\reader.h(35): error C2059: syntax error: ')'
+w:\universal-translator\c\src\reader.h(35): error C2054: expected '(' to follow 'amount'
+w:\universal-translator\c\src\reader.h(39): error C2143: syntax error: missing ')' before '*'
+w:\universal-translator\c\src\reader.h(39): error C2143: syntax error: missing '{' before '*'
+w:\universal-translator\c\src\reader.h(39): error C2059: syntax error: ')'
+w:\universal-translator\c\src\reader.h(40): warning C4431: missing type specifier - int assumed. Note: C no longer supports default-int
+w:\universal-translator\c\src\reader.h(40): error C2054: expected '(' to follow 'reader'
+w:\universal-translator\c\src\reader.h(44): error C2143: syntax error: missing ')' before '*'
+w:\universal-translator\c\src\reader.h(44): error C2143: syntax error: missing '{' before '*'
+w:\universal-translator\c\src\reader.h(44): error C2059: syntax error: ')'
+w:\universal-translator\c\src\reader.h(45): warning C4431: missing type specifier - int assumed. Note: C no longer supports default-int
+w:\universal-translator\c\src\reader.h(45): error C2054: expected '(' to follow 'reader'
+w:\universal-translator\c\src\reader.h(48): error C2143: syntax error: missing ')' before '*'
+w:\universal-translator\c\src\reader.h(48): error C2143: syntax error: missing '{' before '*'
+w:\universal-translator\c\src\reader.h(48): warning C4431: missing type specifier - int assumed. Note: C no longer supports default-int
+w:\universal-translator\c\src\reader.h(48): error C2371: 'u64': redefinition; different basic types
+w:\universal-translator\c\lib\nicetypes.h(12): note: see declaration of 'u64'
+w:\universal-translator\c\src\reader.h(48): error C2146: syntax error: missing ';' before identifier 'count'
+w:\universal-translator\c\src\reader.h(48): warning C4218: nonstandard extension used: must specify at least a storage class or a type
+w:\universal-translator\c\src\reader.h(48): error C2059: syntax error: ')'
+w:\universal-translator\c\src\reader.h(49): warning C4431: missing type specifier - int assumed. Note: C no longer supports default-int
+w:\universal-translator\c\src\reader.h(49): error C2054: expected '(' to follow 'count'
+w:\universal-translator\c\src\reader.h(59): error C2143: syntax error: missing ')' before '*'
+w:\universal-translator\c\src\reader.h(59): error C2143: syntax error: missing '{' before '*'
+w:\universal-translator\c\src\reader.h(59): error C2059: syntax error: ')'
+w:\universal-translator\c\src\reader.h(60): warning C4431: missing type specifier - int assumed. Note: C no longer supports default-int
+w:\universal-translator\c\src\reader.h(60): error C2054: expected '(' to follow 'reader'
+w:\universal-translator\c\src\reader.h(63): error C2143: syntax error: missing ')' before '*'
+w:\universal-translator\c\src\reader.h(63): error C2143: syntax error: missing '{' before '*'
+w:\universal-translator\c\src\reader.h(63): warning C4431: missing type specifier - int assumed. Note: C no longer supports default-int
+w:\universal-translator\c\src\reader.h(63): error C2371: 'u64': redefinition; different basic types
+w:\universal-translator\c\lib\nicetypes.h(12): note: see declaration of 'u64'
+w:\universal-translator\c\src\reader.h(63): error C2146: syntax error: missing ';' before identifier 'count'
+w:\universal-translator\c\src\reader.h(63): warning C4218: nonstandard extension used: must specify at least a storage class or a type
+w:\universal-translator\c\src\reader.h(63): error C2059: syntax error: ')'
+w:\universal-translator\c\src\reader.h(64): warning C4431: missing type specifier - int assumed. Note: C no longer supports default-int
+w:\universal-translator\c\src\reader.h(64): error C2054: expected '(' to follow 'count'
+w:\universal-translator\c\src\reader.h(74): error C2143: syntax error: missing ')' before '*'
+w:\universal-translator\c\src\reader.h(74): error C2143: syntax error: missing '{' before '*'
+w:\universal-translator\c\src\reader.h(74): warning C4431: missing type specifier - int assumed. Note: C no longer supports default-int
+w:\universal-translator\c\src\reader.h(74): error C2371: 's64': redefinition; different basic types
+w:\universal-translator\c\lib\nicetypes.h(16): note: see declaration of 's64'
+w:\universal-translator\c\src\reader.h(74): error C2146: syntax error: missing ';' before identifier 'count'
+w:\universal-translator\c\src\reader.h(74): warning C4218: nonstandard extension used: must specify at least a storage class or a type
+w:\universal-translator\c\src\reader.h(74): error C2059: syntax error: ')'
+w:\universal-translator\c\src\reader.h(75): warning C4431: missing type specifier - int assumed. Note: C no longer supports default-int
+w:\universal-translator\c\src\reader.h(75): error C2054: expected '(' to follow 'count'
+w:\universal-translator\c\src\reader.h(75): fatal error C1003: error count exceeds 100; stopping compilation
