@@ -6,8 +6,8 @@ Follow these guidelines when you want to change anything in this folder.
 (\[\w+\])([^\(](#\w+\])([^\())
 \1\2
 
-- [Priorities](#Priorities)
-- [Structure](##Structure)
+- [Priorities](#priorities)
+- [Structure](#structure)
   - [Subfolders](#Subfolders)
   - ["lang.h"](#"lang.h")
   - ["lexer.h"](#"lexer.h")
