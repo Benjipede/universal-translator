@@ -3,18 +3,20 @@
 Follow these guidelines when you want to change anything in this folder.
 
 ## Contents
+(\[\w+\])([^\(](#\w+\])([^\())
+\1\2
 
 - [Priorities](#Priorities)
-- [Structure]
-  - [Subfolders]
-  - ["lang.h"]
-  - ["lexer.h"]
-  - ["parser.h"]
-  - ["deparser.h"]
-  - ["delexer.h"]
-- [Extending support of a language]
-- [Add support for new language]
-  - [Create a new tool for an existing language]
+- [Structure](#Structure)
+  - [Subfolders](#Subfolders)
+  - ["lang.h"](#"lang.h")
+  - ["lexer.h"](#"lexer.h")
+  - ["parser.h"](#"parser.h")
+  - ["deparser.h"](#"deparser.h")
+  - ["delexer.h"](#"delexer.h")
+- [Extending support of a language](#Extending support of a language)
+- [Add support for new language](#Add support for new language)
+  - [Create a new tool for an existing language](#Create a new tool for an existing language)
 
 ## Priorities
 
@@ -100,11 +102,11 @@ When you want to add support for language "name" go through the following steps.
 
 1. Create the subfolder "name", preferably in lowercase letters.
 2. In the newly created folder make the files "lang.h", "lexer.h", "parser.h", "deparser.h", "delexer.h".
-3. In lexer.h put a procedure `Token lex_name(Reader *, string *)` (see ["lexer.h"]).
-4. In parser.h put a procedure `Global parser_name(Lexer, Reader *, string *, Stack *, Queue *)`  (see ["parser.h"]).
-5. In deparser.h put a procedure `void deparser_name(Delexer, Writer *, Global)`  (see ["deparser.h"]).
-6. In delexer.h put a procedure `void delexer_name(Writer *, Token)`  (see ["delexer.h"]).
-7. In "lang.h" put includes to the other files and a procedure `Language get_language_name()`  (see ["lang.h"]).
+3. In lexer.h put a procedure `Token lex_name(Reader *, string *)` (see ["lexer.h"](#"lexer.h")).
+4. In parser.h put a procedure `Global parser_name(Lexer, Reader *, string *, Stack *, Queue *)`  (see ["parser.h"](#"parser.h")).
+5. In deparser.h put a procedure `void deparser_name(Delexer, Writer *, Global)`  (see ["deparser.h"](#"deparser.h")).
+6. In delexer.h put a procedure `void delexer_name(Writer *, Token)`  (see ["delexer.h"](#"delexer.h")).
+7. In "lang.h" put includes to the other files and a procedure `Language get_language_name()`  (see ["lang.h"](#"lang.h")).
 
 ### Create a new tool for an existing language
 
