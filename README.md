@@ -9,7 +9,7 @@ The primary goal is to be able to avoid most of the drudge work of translating s
 The code exists in the "c/" folder since I hope to port the code to Jonathan Blow's programming language JAI when it is released as it has many features that will be very useful for this project.
 
 ## Contribute
-At this early stage I am trying to nail down how the code should be structured. If you are experienced with lexing, parsing etc., then I will appreciate your advice. At a later stage I hope that people will add support for many languages.
+At this early stage I am trying to nail down how the code should be structured. If you are experienced with lexing, parsing etc., then I will appreciate your advice. I also hope that some will help make lexers, parsers etc. for some languages. Although early contributions are likely to need updates, they will be valuable for testing. See [c/src/languages/LANGUAGES.md](c/src/languages/LANGUAGES.md) if you would like to contribute.
 
 I plan to soon submit Universal Translator as a project to [Handmade Network](https://handmade.network/) to get a progress blog and a forum, so if this project interests you look out for it appearing there.
 
