@@ -94,6 +94,8 @@ Example delexer.h:
 
 We call the aforementioned procedures in [lexer.h](#lexerh), [parser.h](#parserh), [deparser.h](#deparserh), and [delexer.h](#delexerh) tools.
 
+To extend support of a language you simply augment the existing existing tools for that language to handle more cases.
+
 ### Create a new tool for an existing language
 
 Maybe you simply want to create a lexer, parser, deparser or delexer. Then just follow step 3, 4, 5, or 6 from the list [below](#add-support-for-new-language) with 'name' appended with a descriptive identifier.
