@@ -41,7 +41,7 @@ Example subfolder:
 lang.h acts as the bottleneck of its subfolder. It includes the files lexer.h, parser.h, deparser.h and delexer.h. Furthermore, it defines the `Language get_language_*()` function for the language which returns some information about the language, which at the time of this writing is the name of the language, possible extensions and the default lexer, parser, deparser and delexer (see example below). The first extension returned is used for extension-inference by the command-line interface.
 
 Example lang.h:
-```c_cpp
+```clike
 #include lexer.h
 #include delexer.h
 #include parser.h
