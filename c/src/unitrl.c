@@ -12,16 +12,13 @@
 
 #include "languages/languages.h"
 
-#define STORAGE_SIZE 0x400*0x400 // 1 MB
-u8 storage_buffer[STORAGE_SIZE];
-
 #define STACK_CAPACITY 0x100
 #define QUEUE_CAPACITY 0x100
 
 Token stack_buffer[STACK_CAPACITY];
 Token queue_buffer[QUEUE_CAPACITY];
 
-b8 handle_commandline_arguments(int argc, char **argv, string *storage, char **source, char **destination, Reader *reader, Lexer *lexer, Parser *parser, Deparser *deparser, Delexer *delexer, Writer *writer)
+b8 handle_commandline_arguments(int argc, char **argv, Pool *pool, char **source, char **destination, Reader *reader, Lexer *lexer, Parser *parser, Deparser *deparser, Delexer *delexer, Writer *writer)
 {
     s64 source_language, target_language;
     b8 infer_extensions;
@@ -89,7 +86,7 @@ b8 handle_commandline_arguments(int argc, char **argv, string *storage, char **s
                     return 0;
                 }
                 argument = argv[index];
-                source_language = find_language_by_name(argument);
+                source_language = find_language_by_name(string_from_cstring(argument));
                 if(source_language < 0)
                 {
                     printf("%s is not a supported language.\n", argument);
@@ -104,7 +101,7 @@ b8 handle_commandline_arguments(int argc, char **argv, string *storage, char **s
                     return 0;
                 }
                 argument = argv[index];
-                target_language = find_language_by_name(argument);
+                target_language = find_language_by_name(string_from_cstring(argument));
                 if(target_language < 0)
                 {
                     printf("%s is not a supported language.\n", argument);
@@ -151,7 +148,7 @@ b8 handle_commandline_arguments(int argc, char **argv, string *storage, char **s
         else if(source_language >= 0)
         {
             if(infer_extensions && get_language_array[source_language]().extension_count)
-                *source = make_filename(storage, get_filename_basename(*source), get_language_array[source_language]().extensions[0]);
+                *source = make_filename(get_filename_basename(*source), get_language_array[source_language]().extensions[0], pool);
         }
         else
         {
@@ -179,7 +176,7 @@ b8 handle_commandline_arguments(int argc, char **argv, string *storage, char **s
             if(target_language >= 0)
             {
                 if(infer_extensions && get_language_array[target_language]().extension_count)
-                    *destination = make_filename(storage, get_filename_basename(*source), get_language_array[target_language]().extensions[0]);
+                    *destination = make_filename(get_filename_basename(*source), get_language_array[target_language]().extensions[0], pool);
             }
             else
             {
@@ -205,7 +202,7 @@ b8 handle_commandline_arguments(int argc, char **argv, string *storage, char **s
             else if(target_language >= 0)
             {
                 if(infer_extensions && get_language_array[target_language]().extension_count)
-                    *destination = make_filename(storage, get_filename_basename(*destination), get_language_array[target_language]().extensions[0]);
+                    *destination = make_filename(get_filename_basename(*destination), get_language_array[target_language]().extensions[0], pool);
             }
             else
             {
@@ -221,7 +218,7 @@ b8 handle_commandline_arguments(int argc, char **argv, string *storage, char **s
     *delexer = get_language_array[target_language]().delexer;
     *deparser = get_language_array[target_language]().deparser;
     
-    *reader = make_ascii_dumper(*source, storage);
+    *reader = make_ascii_dumper(*source, pool);
     *writer = make_ascii_putter(*destination);
     
     return 1;
@@ -240,20 +237,18 @@ int main(int argc, char **argv)
     Stack stack;
     Queue que;
     
-    string storage;
-    storage.data = storage_buffer;
-    storage.count = STORAGE_SIZE;
+    Pool pool = make_default_pool();
     
     {
         char *source, *destination;
-        if(!handle_commandline_arguments(argc, argv, &storage, &source, &destination, &reader, &lexer, &parser, &deparser, &delexer, &writer))
+        if(!handle_commandline_arguments(argc, argv, &pool, &source, &destination, &reader, &lexer, &parser, &deparser, &delexer, &writer))
             return 0;
     }
     stack = make_stack(stack_buffer, STACK_CAPACITY);
     que = make_queue(queue_buffer, QUEUE_CAPACITY);
     
     {
-        Global ast = parse_globals(parser, lexer, &reader, &storage, &stack, &que);
+        Global ast = parse_globals(parser, lexer, &reader, &pool, &stack, &que);
         deparser(delexer, &writer, ast);
     }
     

@@ -2,8 +2,7 @@ Token lex_whitespace(Reader *reader)
 {
     Token token;
     u32 c;
-    c = reader->curr(reader);
-    //if(c != '\n' && c != ' ')  c = reader->next(reader);
+    c = curr(reader);
     
     token.type = Token_whitespace;
     token.newline_count = 0;
@@ -11,34 +10,44 @@ Token lex_whitespace(Reader *reader)
     while(c == ' ')
     {
         ++token.space_count;
-        c = reader->next(reader);
+        c = next(reader);
     }
     while(c == '\n')
     {
         token.space_count = 0;
         ++token.newline_count;
-        c = reader->next(reader);
+        c = next(reader);
         while(c == ' ')
         {
             ++token.space_count;
-            c = reader->next(reader);
+            c = next(reader);
         }
     }
     
     return token;
 }
 
-Token lex_unknown(Reader *reader, string *storage, b8 (*still_unknown)(Reader *, string *))
+void append_to_string(string *text, u32 c, Pool *pool)
+{
+    u8 size = 1; // @ascii
+    if(pool->bytes_left < size)
+        *text = copy_string(get_memory_align(pool, text->count + size, 1), *text);
+    else
+        get_memory_align(pool, size, 1);
+    text->data[text->count] = (u8)c; // @ascii
+    ++text->count;
+}
+
+Token lex_unknown(Reader *reader, Pool *pool, b8 (*still_unknown)(Reader *, Pool *))
 {
     Token token;
     token.type = Token_unknown;
-    token.text.data = storage->data;
-    for(u32 c = reader->curr(reader); c != eof && c != '\n' && c != ' '&& still_unknown(reader, storage); c = reader->next(reader))
+    token.text.count = 0;
+    token.text.data = get_memory_align(pool, 0, 1);
+    
+    for(u32 c = curr(reader); c != eof && c != '\n' && c != ' ' && still_unknown(reader, pool); c = next(reader))
     {
-        *storage->data = (char)c;
-        ++storage->data;
-        --storage->count;
+        append_to_string(&token.text, c, pool);
     }
-    token.text.count = storage->data - token.text.data;
     return token;
 }

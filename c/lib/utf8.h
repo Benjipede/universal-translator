@@ -1,19 +1,15 @@
 #ifndef UTF8_H
 #define UTF8_H
 
-#include "nicetypes.h"
+#include "pool.h"
 
 //
 // Characters
 //
 
-u32 char_to_lower(u32 c)
+b8 is_whitespace(u32 c)
 {
-    u32 result;
-    if('A' <= c && c <= 'Z')
-        result = c + ('a' - 'A');
-    else
-        result = c;
+    b8 result = c == ' ' || c == '\n' || c == '\t';
     return result;
 }
 
@@ -129,6 +125,18 @@ string copy_string(u8 *ptr, string text)
     return result;
 }
 
+b8 are_strings_equal(string text1, string text2)
+{
+    if(text1.count != text2.count)
+        return 0;
+    for(s64 index = 0; index < text1.count; ++index)
+    {
+        if(text1.data[index] != text2.data[index])
+            return 0;
+    }
+    return 1;
+}
+
 b8 is_string_equal_to_cstring(string text, char *c)
 {
     for(s64 index = 0; index < text.count; ++index)
@@ -173,25 +181,13 @@ string get_filename_extension(char *argument)
     return result;
 }
 
-char *make_filename(string *storage, string basename, char *extension)
+char *make_filename(string basename, string extension, Pool *pool)
 {
-    char *result;
-    result = (char *)storage->data;
-    memcpy(storage->data, basename.data, basename.count);
-    storage->data   += basename.count;
-    storage->count  -= basename.count+1;
-    *storage->data = (u8)'.';
-    ++storage->data;
-    
-    for(; *extension; ++extension)
-    {
-        *storage->data = (u8)*extension;
-        ++storage->data;
-        --storage->count;
-    }
-    *storage->data = 0;
-    ++storage->data;
-    --storage->count;
+    char *result = get_memory_align(pool, basename.count + 1 + extension.count + 1, 1);
+    copy_string((u8 *)result, basename);
+    result[basename.count] = '.';
+    copy_string((u8 *)result + basename.count + 1, extension);
+    result[basename.count + 1 + extension.count] = '.';
     
     return result;
 }

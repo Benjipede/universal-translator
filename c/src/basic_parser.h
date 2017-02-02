@@ -29,7 +29,7 @@ global:
 
 #include <stdlib.h>
 
-Space parse_space(Lexer lexer, Reader *reader, string *storage, Stack *stack, Queue *que)
+Space parse_space(Lexer lexer, Reader *reader, Pool *pool, Stack *stack, Queue *que)
 {
     Token token;
     Space result;
@@ -40,15 +40,11 @@ Space parse_space(Lexer lexer, Reader *reader, string *storage, Stack *stack, Qu
     {
         if(token.type == Token_comment)  ++result.count;
         queue(que, token); // @Robustness: Handle adjacent whitespace tokens?
-        token = lexer(reader, storage);
+        token = lexer(reader, pool);
     }
     push(stack, token);
     
-    s64 storage_used = sizeof(Comment) * result.count;
-    ASSERT(storage_used <= storage->count)
-    result.comments = (Comment *)storage->data;
-    storage->count  -= storage_used;
-    storage->data   += storage_used;
+    result.comments = (Comment *)get_memory(pool, sizeof(Comment) * result.count);
     
     token = dequeue(que);
     if(token.type == Token_whitespace)
@@ -87,13 +83,13 @@ Space parse_space(Lexer lexer, Reader *reader, string *storage, Stack *stack, Qu
 #define GLOBALS_BUFFER_SIZE 0x10
 Global globals_buffer[GLOBALS_BUFFER_SIZE];
 
-Global parse_globals(Parser parser, Lexer lexer, Reader *reader, string *storage, Stack *stack, Queue *que)
+Global parse_globals(Parser parser, Lexer lexer, Reader *reader, Pool *pool, Stack *stack, Queue *que)
 {
     Global ast;
     ast.type = Global_globals;
     ast.globals.elements = globals_buffer;
     ast.globals.count = 0;
-    for(Global global = parser(lexer, reader, storage, stack, que); global.type != Global_eof; global = parser(lexer, reader, storage, stack, que))
+    for(Global global = parser(lexer, reader, pool, stack, que); global.type != Global_eof; global = parser(lexer, reader, pool, stack, que))
     {
         ast.globals.elements[ast.globals.count++] = global;
     }

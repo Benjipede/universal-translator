@@ -12,7 +12,6 @@ typedef struct
     u8 *last;
 } adData;
 
-static
 u32 adcurr(Reader *reader)
 {
     if(CURRENT < FIRST)
@@ -22,7 +21,6 @@ u32 adcurr(Reader *reader)
     return (u32)*CURRENT;
 }
 
-static
 u32 adnext(Reader *reader)
 {
     
@@ -35,7 +33,6 @@ u32 adnext(Reader *reader)
     return (u32)*CURRENT;
 }
 
-static
 u32 adprev(Reader *reader)
 {
     if(CURRENT <= FIRST)
@@ -47,7 +44,6 @@ u32 adprev(Reader *reader)
     return (u32)*CURRENT;
 }
 
-static
 u32 admove(Reader *reader, s64 amount)
 {
     CURRENT += amount;
@@ -64,7 +60,6 @@ u32 admove(Reader *reader, s64 amount)
     return (u32)*CURRENT;
 }
 
-static
 u32 adpeek(Reader *reader, s64 count)
 {
     u8 *destination = CURRENT + count;
@@ -75,38 +70,10 @@ u32 adpeek(Reader *reader, s64 count)
     else
         return (u32)*destination;
 }
-/*
-static
-void *read_entire_file_and_create_addata(char *filename, string *storage)
+
+Reader make_ascii_dumper_open(FILE *file, Pool *pool)
 {
-    adData *result;
-    FILE *file = fopen(filename, "rb");
-    if(file)
-    {
-        s64 filesize, storage_used;
-        
-        fseek(file, 0, SEEK_END);
-        filesize = ftell(file);
-        fseek(file, 0, SEEK_SET);
-        
-        storage_used = filesize + sizeof(adData);
-        ASSERT(storage_used <= storage->count);
-        fread(storage->data, 1, filesize, file);
-        
-        result = (adData *)(storage->data + filesize);
-        result->current = result->first = storage->data;
-        result->last = result->first + filesize - 1;
-        
-        storage->count -= storage_used;
-        storage->data  += storage_used;
-        
-        fclose(file);
-    }
-    return result;
-}
-*/
-Reader make_ascii_dumper(char *filename, string *storage)
-{
+    
     Reader reader;
     reader.curr = adcurr;
     reader.next = adnext;
@@ -116,30 +83,29 @@ Reader make_ascii_dumper(char *filename, string *storage)
     strengthen_reader(&reader);
     
     {
-        FILE *file = fopen(filename, "rb");
-        if(file)
-        {
-            s64 filesize, storage_used;
-            
-            fseek(file, 0, SEEK_END);
-            filesize = ftell(file);
-            fseek(file, 0, SEEK_SET);
-            
-            storage_used = filesize + sizeof(adData);
-            ASSERT(storage_used <= storage->count);
-            fread(storage->data, 1, filesize, file);
-            
-            reader.data = (storage->data + filesize);
-            ((adData *)reader.data)->current = ((adData *)reader.data)->first = storage->data;
-            ((adData *)reader.data)->last = ((adData *)reader.data)->first + filesize - 1;
-            
-            storage->count -= storage_used;
-            storage->data  += storage_used;
-            
-            fclose(file);
-        }
+        u64 filesize;
+        fseek(file, 0, SEEK_END);
+        filesize = ftell(file);
+        fseek(file, 0, SEEK_SET);
+        
+        reader.data = get_memory(pool, sizeof(adData));
+        ((adData *)reader.data)->first = get_memory_align(pool, filesize, 1);
+        ((adData *)reader.data)->current = ((adData *)reader.data)->first;
+        ((adData *)reader.data)->last = ((adData *)reader.data)->first + fread(((adData *)reader.data)->first, 1, filesize, file) - 1;
     }
     
+    return reader;
+}
+
+Reader make_ascii_dumper(char *filename, Pool *pool)
+{
+    Reader reader = {0};
+    FILE *file = fopen(filename, "rb");
+    if(file)
+    {
+        reader = make_ascii_dumper_open(file, pool);
+        fclose(file);
+    }
     return reader;
 }
 

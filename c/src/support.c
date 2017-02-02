@@ -1,4 +1,6 @@
 #include "lib.h"
+#include "reader.h"
+#include "writer.h"
 
 int main(int argc, char **argv)
 {
@@ -6,8 +8,12 @@ int main(int argc, char **argv)
     FILE *langfile, *toolfile;
     
     char *initial_path = "w:/universal-translator/c/src/languages/";
+    if(argc == 1)
+    {
+        printf("General case not yet supported. Use: support language [ tool... ]");
+        return 0;
+    }
     
-    if(argc > 1)
     {
         char *argument = argv[1];
         string path;
@@ -37,8 +43,8 @@ int main(int argc, char **argv)
         }
         
         {
-            string string_to_match = string_from_cstring("SUPPORT");
-            for(u8 match = 0; match < string_to_match.count; )
+            string string_to_match = string_from_cstring("SUPPORT(");
+            for(s64 match = 0; match < string_to_match.count; )
             {
                 int c = fgetc(toolfile);
                 if(c < 0)
@@ -50,10 +56,36 @@ int main(int argc, char **argv)
                     ++match;
             }
             printf("FOUND!\n");
-            return 0;
+            /*
+            while(1)
+            {
+                int c;
+                switch(c)
+                {
+                    case ')':
+                    {
+                        
+                    } break;
+                    case ',':
+                    {
+                        
+                    } break;
+                    case '\\':
+                    {
+                        c = fgetc(
+                    } break;
+                    default:
+                    {
+                        if(c < 0)
+                        {
+                            printf("Syntax error");
+                            return 0;
+                        }
+                    }
+                }
+            }
+            */
         }
     }
-    
-    printf("General case not yet supported. Use: support language [ tool... ]");
     return 0;
 }

@@ -1,11 +1,11 @@
-b8 still_unknown_simple(Reader *reader, string *storage)
+b8 still_unknown_simple(Reader *reader, Pool *pool)
 {
     u32 c;
     c = curr(reader);
     return !is_alpha(c) && c != '_' && c != '#';
 }
 
-Token lex_simple(Reader *reader, string *storage)
+Token lex_simple(Reader *reader, Pool *pool)
 {
     Token token;
     u32 c;
@@ -29,7 +29,9 @@ Token lex_simple(Reader *reader, string *storage)
         case '#':
         {
             token.type = Token_comment;
-            token.comment.text.data = storage->data;
+            token.comment.text.count = 0;
+            token.comment.text.data = get_memory_align(pool, 0, 1);
+            
             for(c = reader->next(reader); ; c = reader->next(reader))
             {
                 if(c == eof || c == '\n')
@@ -43,34 +45,27 @@ Token lex_simple(Reader *reader, string *storage)
                     reader->next(reader);
                     break;
                 }
-                *storage->data = (u8)c;
-                ++storage->data;
-                --storage->count;
+                append_to_string(&token.comment.text, c, pool);
             }
-            token.comment.text.count = storage->data - token.comment.text.data;
         } break;
         default:
         {
             if(is_alpha(c) || c == '_')
             {
                 token.type = Token_identifier;
-                token.text.data = storage->data;
+                token.comment.text.count = 0;
+                token.comment.text.data = get_memory_align(pool, 0, 1);
                 
-                *storage->data = (u8)c;
-                ++storage->data;
-                --storage->count;
+                append_to_string(&token.comment.text, c, pool);
                 
                 for(c = reader->next(reader); is_alphanumeric(c) || c == '_'; c = reader->next(reader))
                 {
-                    *storage->data = (u8)c;
-                    ++storage->data;
-                    --storage->count;
+                    append_to_string(&token.comment.text, c, pool);
                 }
-                token.text.count = storage->data - token.text.data;
             }
             else
             {
-                token = lex_unknown(reader, storage, still_unknown_simple);
+                token = lex_unknown(reader, pool, still_unknown_simple);
             }
         }
     }

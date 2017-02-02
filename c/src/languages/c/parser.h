@@ -1,11 +1,11 @@
-Global parse_c(Lexer lexer, Reader *reader, string *storage, Stack *stack, Queue *que)
+Global parse_c(Lexer lexer, Reader *reader, Pool *pool, Stack *stack, Queue *que)
 {
     Global ast = {0};
     Token token;
     
     token = pop(stack);
     if(token.type == Token_none)
-        token = lexer(reader, storage);
+        token = lexer(reader, pool);
     switch(token.type)
     {
         case Token_eof:
@@ -22,12 +22,12 @@ Global parse_c(Lexer lexer, Reader *reader, string *storage, Stack *stack, Queue
         {
             push(stack, token);
             ast.type = Global_space;
-            ast.space = parse_space(lexer, reader, storage, stack, que);
+            ast.space = parse_space(lexer, reader, pool, stack, que);
         } break;
         case Token_identifier:
         {
             Token token_next;
-            token_next = lexer(reader, storage);
+            token_next = lexer(reader, pool);
             if(token_next.type == Token_semicolon)
             {
                 ast.type = Global_expression;
