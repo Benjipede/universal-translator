@@ -4,7 +4,7 @@ Follow these guidelines when you want to change anything in this folder.
 
 ## Contents
 
-- [Priorities](Priorities)
+- [Priorities](#Priorities)
 - [Structure]
   - [Subfolders]
   - ["lang.h"]
