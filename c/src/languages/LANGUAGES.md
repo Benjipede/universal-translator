@@ -1,10 +1,9 @@
 # Language Guidelines
 
-Follow these guidelines when you want to change anything in this folder.
+This document outlines the structure of the code in this folder and gives guidlines regarding contributions to language support.
 
 ## Contents
 
-- [Priorities](#priorities)
 - [Structure](#structure)
   - [Subfolders](#subfolders)
   - [lang.h](#langh)
@@ -15,11 +14,6 @@ Follow these guidelines when you want to change anything in this folder.
 - [Extend support of a language](#extend-support-of-a-language)
   - [Create a new tool for an existing language](#create-a-new-tool-for-an-existing-language)
 - [Add support for new language](#add-support-for-new-language)
-
-## Priorities
-
-- [ ] Nail down the structure nailed down
-- [ ] Support a few languages more fully for testing purposes
 
 ## Structure
 

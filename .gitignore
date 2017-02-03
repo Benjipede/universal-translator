@@ -34,5 +34,6 @@ bin
 # Debug files
 *.dSYM/
 *.su
-*.ilk
+*.sln
 *.pdb
+*.ilk
