@@ -8,7 +8,7 @@
 //
 // Everything needed from ../lib/ needed by streamers and tools
 //
-#include "../lib/unicode.h"
+#include "../lib/string.h"
 
 //
 // Everything an interface needs

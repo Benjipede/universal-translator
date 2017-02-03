@@ -29,5 +29,5 @@ The todos mentioned in this section should be done at some point.
 
 The todos mentioned in this section might or might not be good ideas.
 
-- [ ] Change which data structures [tools](c/languages/LANGUAGES.md#tools) has access to.
 - [ ] Change from unions to inheritance and from passing values to passing pointers (Effiency concern)
+- [ ] Change which data structures [tools](c/languages/LANGUAGES.md#tools) has access to.

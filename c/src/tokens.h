@@ -19,6 +19,7 @@ typedef enum {
 } TokenType;
 
 typedef struct Token {
+    TokenType type;
     union
     {
         string text;
@@ -32,10 +33,8 @@ typedef struct Token {
             s64 newline_count, space_count;
         };
     };
-    TokenType type;
+    
 } Token;
-
-
 
 typedef struct Stack
 {
