@@ -34,6 +34,10 @@ bin
 # Debug files
 *.dSYM/
 *.su
+
+# Visual Studio
 *.sln
 *.pdb
 *.ilk
+.vs
+Debug
