@@ -7,6 +7,33 @@
 // Characters
 //
 
+#define ONE_BYTE            (((u8)(arg) >> 7) ^ 0x1)
+#define TWO_BYTES           (((u8)(arg) >> 5) ^ 0x1)
+#define THREE_BYTES(arg)    (((u8)(arg) >> 4) ^ 0x1)
+#define FOUR_BYTES(arg)     (((u8)(arg) >> 3) ^ 0x1)
+#define MIDDLE_BYTE(arg)    (((u8)(arg) >> 6) ^ 0x1)
+u8 utf8_size(u8 c)
+{
+    if(ONE_BYTE(c))
+        return 1;
+    if(TWO_BYTES(c))
+        return 2;
+    if(THREE_BYTES(c))
+        return 3;
+    if(FOUR_BYTES(c))
+        return 4;
+    return 0;
+}
+
+void utf8_inc(u8 *c)
+{
+    for(++c; MIDDLE_BYTE(c); ++c);
+}
+void utf8_dec(u8 *c)
+{
+    for(--c; MIDDLE_BYTE(c); --c);
+}
+
 b8 is_whitespace(u32 c)
 {
     b8 result = c == ' ' || c == '\n' || c == '\t';
