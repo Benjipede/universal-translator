@@ -156,18 +156,6 @@ b8 handle_commandline_arguments(int argc, char **argv, Pool *pool, char **source
     }
     
     {
-        FILE *file;
-        file = fopen(*source, "rb");
-        if(file)
-            fclose(file);
-        else
-        {
-            perror(*source);
-            return 0;
-        }
-    }
-    
-    {
         
         if(!*destination)
         {
@@ -217,7 +205,17 @@ b8 handle_commandline_arguments(int argc, char **argv, Pool *pool, char **source
     *deparser = get_language_array[target_language]().deparser;
     
     *reader = make_ascii_dumper(*source, pool);
+    if(!reader->data)
+    {
+        perror(*source);
+        return 0;
+    }
     *writer = make_ascii_putter(*destination);
+    if(!writer->data)
+    {
+        perror(*destination);
+        return 0;
+    }
     
     return 1;
 }

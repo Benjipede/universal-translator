@@ -7,8 +7,8 @@
 // Characters
 //
 
-#define ONE_BYTE            (((u8)(arg) >> 7) ^ 0x1)
-#define TWO_BYTES           (((u8)(arg) >> 5) ^ 0x1)
+#define ONE_BYTE(arg)       (((u8)(arg) >> 7) ^ 0x1)
+#define TWO_BYTES(arg)      (((u8)(arg) >> 5) ^ 0x1)
 #define THREE_BYTES(arg)    (((u8)(arg) >> 4) ^ 0x1)
 #define FOUR_BYTES(arg)     (((u8)(arg) >> 3) ^ 0x1)
 #define MIDDLE_BYTE(arg)    (((u8)(arg) >> 6) ^ 0x1)
@@ -27,11 +27,11 @@ u8 utf8_size(u8 c)
 
 void utf8_inc(u8 *c)
 {
-    for(++c; MIDDLE_BYTE(c); ++c);
+    for(++c; MIDDLE_BYTE(*c); ++c);
 }
 void utf8_dec(u8 *c)
 {
-    for(--c; MIDDLE_BYTE(c); --c);
+    for(--c; MIDDLE_BYTE(*c); --c);
 }
 
 b8 is_whitespace(u32 c)
@@ -214,7 +214,7 @@ char *make_filename(string basename, string extension, Pool *pool)
     copy_string((u8 *)result, basename);
     result[basename.count] = '.';
     copy_string((u8 *)result + basename.count + 1, extension);
-    result[basename.count + 1 + extension.count] = '.';
+    result[basename.count + 1 + extension.count] = 0;
     
     return result;
 }

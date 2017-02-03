@@ -10,7 +10,7 @@ typedef struct
     Delexer delexer;
 } Language;
 
-#define SUPPORT(...)
+#define SUPPORT(...) // for the utility program 'support' to generate SUPPORT.md (see LANGUAGES.md)
 #include "c/lang.h"
 #include "simple/lang.h"
 

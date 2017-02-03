@@ -29,5 +29,3 @@ void strong_put_more(Writer *writer, u8 *c)
         writer->put(writer, *d);
     }
 }
-
-#include "writers/ascii_putter.h"

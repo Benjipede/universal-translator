@@ -149,5 +149,3 @@ void strengthen_reader(Reader *reader)
     
     if(reader->peekahead && reader->peekback && !reader->peek)  reader->peek = strong_peek;
 }
-
-#include "readers/ascii_dumper.h"

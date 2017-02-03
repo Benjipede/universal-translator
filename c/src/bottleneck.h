@@ -13,8 +13,7 @@
 //
 // Everything an interface needs
 //
-#include "streamers/reader.h"
-#include "streamers/writer.h"
+#include "streamers/streamer.h"
 
 #include "tokens.h"
 #include "syntax.h"
