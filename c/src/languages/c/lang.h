@@ -3,6 +3,10 @@
 #include "parser.h"
 #include "deparser.h"
 
+//
+// Just set these values
+//
+
 const char *name_c                  = "c";
 const char *extensions_c[]          = {"c", "h"};
 

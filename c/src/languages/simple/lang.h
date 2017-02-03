@@ -3,6 +3,10 @@
 #include "parser.h"
 #include "deparser.h"
 
+//
+// Just set these values
+//
+
 const char *name_simple                  = "simple";
 const char *extensions_simple[]          = {"sim"};
 

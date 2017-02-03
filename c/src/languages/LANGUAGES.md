@@ -25,7 +25,7 @@ languages.h acts as the bottleneck of the "languages" folder. It defines some ty
 
 Each subfolder represents a programming language. Each of them contains at least the files lang.h, lexer.h, parser.h, deparser.h, and delexer.h. A subfolder name may not contain uppercase letters.
 
-Example subfolder:
+Sample subfolder:
 > name/:
 
 > lang.h lexer.h  parser.h  deparser.h  delexer.h
@@ -34,25 +34,45 @@ Example subfolder:
 
 lang.h acts as the bottleneck of its subfolder. It includes [the other files](subfolders). Furthermore, it defines the `Language get_language_*()` function for the language which returns some information about the language, which at the time of this writing is the name of the language, possible extensions and the default lexer, parser, deparser and delexer (see example below). The first extension returned is used for extension-inference by the command-line interface.
 
-Example lang.h:
+Sample lang.h:
 ```c
 #include lexer.h
 #include delexer.h
 #include parser.h
 #include deparser.h
 
-Language get_language_name()
+//
+// Just set these values
+//
+
+const char *name_name                  = "name";
+const char *extensions_name[]          = {"name_primary_extension", "name_header_file"}; // Argh! Why does 'name' have header files and why are the file extensions so verbose??!!
+
+Lexer const lexer_name_default         = lex_name;
+Parser const parser_name_default       = parse_name;
+Deparser const deparser_name_default   = deparse_name;
+Delexer const delexer_name_default     = delex_name;
+
+//
+// Automated from here
+//
+
+string extension_array_c[array_count(extensions_c)];
+
+Language get_language_c()
 {
     Language language;
-    char *extension_array[] = {"name_primary_extension", "name_header_file"}; // Argh! Why does 'name' have header files and why are the file extensions so verbose??!!
-    language.name = "name";
-    language.lexer = lex_name;
-    language.parser = parse_name;
-    language.deparser = deparse_name;
-    language.delexer = delex_name;
     
-    language.extensions = extension_array;
-    language.extension_count = array_count(extension_array);
+    language.name = string_from_cstring(name_c);
+    language.lexer = lexer_c_default;
+    language.parser = parser_c_default;
+    language.deparser = deparser_c_default;
+    language.delexer = delexer_c_default;
+    
+    language.extensions = extension_array_c;
+    for(s64 index = 0; index < array_count(extension_array_c); ++index)
+        language.extensions[index] = string_from_cstring(extensions_c[index]);
+    language.extension_count = array_count(extension_array_c);
     
     return language;
 }
@@ -62,25 +82,21 @@ Language get_language_name()
 
 lexer.h defines one or more procedures of the form `Token lex_name(Reader *reader, string *storage)`. `lex_name` reads source code through `reader` (see "..\reader.h") and returns a token. It uses `storage` to store strings and other variable-length data.
 
-Example lexer.h:
+Sample lexer.h:
 
 ### parser.h
 
 parser.h defines one or more procedures of the form `Global parse_name(Lexer lexer, Reader *reader, string *storage)`. `parse_name` lexes tokens by calling `lexer(reader, storage)` and returns an abstract syntax tree. Like `lex_name` it also uses `storage` to store data.
 
-Example parser.h:
+Sample parser.h:
 
 ### deparser.h
 
 deparser.h defines one or more procedures of the form `void deparse_name(Delexer delexer, Writer *writer, Global ast)`. `deparse_name` breaks down `ast` into the tokens that would naturally make up such an abstract syntax tree in the specific language and passes each of them to `delexer` together with `writer`.
 
-Example deparser.h:
-
 ### delexer.h
 
 delexer.h defines one or more procedures of the form `void delex_name(Writer *writer, Token token)`. `delex_name` breaks down `token` into characters would naturally make up such a token in the specific language and writes them through `writer`.
-
-Example delexer.h:
 
 **The structure is still subject to change. If you have advice on the structure please let me know.**
 

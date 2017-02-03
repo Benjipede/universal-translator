@@ -1,20 +1,18 @@
-#include "lib.h"
+/*
 
-#include "reader.h"
-#include "tokens.h"
-#include "lexer.h"
-#include "syntax.h"
-#include "parser.h"
+  This is a command line interface - and for now the only interface
 
-#include "writer.h"
-#include "delexer.h"
-#include "deparser.h"
+ */
 
-#include "languages/languages.h"
+#include "../bottleneck.h"
 
+#include <stdio.h>
+
+//
+// @Hardcoded
+//
 #define STACK_CAPACITY 0x100
 #define QUEUE_CAPACITY 0x100
-
 Token stack_buffer[STACK_CAPACITY];
 Token queue_buffer[QUEUE_CAPACITY];
 
