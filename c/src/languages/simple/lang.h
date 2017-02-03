@@ -6,7 +6,6 @@
 //
 // Just set these values
 //
-
 const char *name_simple                  = "simple";
 const char *extensions_simple[]          = {"sim"};
 
@@ -18,7 +17,6 @@ Delexer const delexer_simple_default     = delex_simple;
 //
 // Automated from here
 //
-
 string extension_array_simple[array_count(extensions_simple)];
 
 Language get_language_simple()

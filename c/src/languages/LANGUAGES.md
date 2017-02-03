@@ -26,17 +26,22 @@ For each supported language there are at least one of each of the following proc
 - **Deparser:** `void deparse_name(Delexer delexer, Writer *writer, Global ast)`
 - **Delexer:** `void delex_name(Writer *writer, Token token)`
 
-Procedures of these types are collectively referred to as **tools**.
+Procedures of these types are collectively referred to as [**tools**](#tools).
 
 ## Structure
 
 **Warning: The structure is subject to change, so expect that your contributions will need to be updated.**
 
-languages.h acts as the bottleneck of the "languages" folder. It defines some types, includes */lang.h for every subfolder *, defines an array of `Language get_language_*()` functions included from subfolders, and defines some language look-up functions.
+languages.h acts as the bottleneck of the "languages" folder.
+It defines some types, includes */lang.h for every subfolder *,
+defines an array of `Language get_language_*()` functions included from subfolders,
+and defines some language look-up functions.
 
 ### Subfolders
 
-Each subfolder represents a programming language. Each of them contains at least the files lang.h, lexer.h, parser.h, deparser.h, and delexer.h. A subfolder name may not contain uppercase letters.
+Each subfolder represents a programming language.
+Each of them contains at least the files lang.h, lexer.h, parser.h, deparser.h, and delexer.h.
+A subfolder name may not contain uppercase letters.
 
 Sample subfolder:
 > name/:
@@ -45,7 +50,12 @@ Sample subfolder:
 
 ### lang.h
 
-lang.h acts as the bottleneck of its subfolder. It includes [the other files](subfolders). Furthermore, it defines the `Language get_language_*()` function for the language which returns some information about the language, which at the time of this writing is the name of the language, possible extensions and the default tools (see example below). The primary extension is returned as the first possible extension. This means that it can be used for extension-inference by interfaces (see [unitrl](../interfaces/unitrl.c)).
+lang.h acts as the bottleneck of its subfolder.
+It includes [the other files](subfolders).
+Furthermore, it defines the `Language get_language_*()` function for the language which returns some information about the language,
+which at the time of this writing is the name of the language, possible extensions and the default tools (see example below).
+The primary extension is returned as the first possible extension.
+This means that it can be used for extension-inference by interfaces (see [unitrl](../interfaces/unitrl.c)).
 
 Sample lang.h:
 ```c
@@ -95,35 +105,40 @@ Language get_language_c()
 
 #### lexer.h
 
-lexer.h defines one or more procedures of the form `Token lex_name(Reader *reader, string *storage)`. `lex_name` reads source code through `reader` (see "..\reader.h") and returns a token. It uses `storage` to store strings and other variable-length data.
+lexer.h defines one or more procedures of the form `Token lex_name(Reader *reader, string *storage)`.
+`lex_name` reads source code through `reader` (see "..\reader.h") and returns a token.
+It uses `storage` to store strings and other variable-length data.
 
 Sample lexer.h:
 
 #### parser.h
 
-parser.h defines one or more procedures of the form `Global parse_name(Lexer lexer, Reader *reader, string *storage)`. `parse_name` lexes tokens by calling `lexer(reader, storage)` and returns an abstract syntax tree. Like `lex_name` it also uses `storage` to store data.
+parser.h defines one or more procedures of the form `Global parse_name(Lexer lexer, Reader *reader, string *storage)`.
+`parse_name` lexes tokens by calling `lexer(reader, storage)` and returns an abstract syntax tree.
+Like `lex_name` it also uses `storage` to store data.
 
 Sample parser.h:
 
 #### deparser.h
 
-deparser.h defines one or more procedures of the form `void deparse_name(Delexer delexer, Writer *writer, Global ast)`. `deparse_name` breaks down `ast` into the tokens that would naturally make up such an abstract syntax tree in the specific language and passes each of them to `delexer` together with `writer`.
+deparser.h defines one or more procedures of the form `void deparse_name(Delexer delexer, Writer *writer, Global ast)`.
+`deparse_name` breaks down `ast` into the tokens that would naturally make up such an abstract syntax tree in the specific language and passes each of them to `delexer` together with `writer`.
 
 #### delexer.h
 
-delexer.h defines one or more procedures of the form `void delex_name(Writer *writer, Token token)`. `delex_name` breaks down `token` into characters would naturally make up such a token in the specific language and writes them through `writer`.
+delexer.h defines one or more procedures of the form `void delex_name(Writer *writer, Token token)`.
+`delex_name` breaks down `token` into characters would naturally make up such a token in the specific language and writes them through `writer`.
 
-**The structure is still subject to change. If you have advice on the structure please let me know.**
+**The structure is still subject to change.
+If you have advice on the structure please let me know.**
 
 ## Extend support of a language
 
-We call the aforementioned procedures in [lexer.h](#lexerh), [parser.h](#parserh), [deparser.h](#deparserh), and [delexer.h](#delexerh) tools.
-
-To extend support of a language you simply augment the existing existing tools for that language to handle more cases.
+To extend support of a language you simply augment the existing tools for that language to handle more cases.
 
 ### Create a new tool for an existing language
 
-Maybe you simply want to create a lexer, parser, deparser or delexer. Then just follow step 3, 4, 5, or 6 from the list [below](#add-support-for-new-language) with 'name' appended with a descriptive identifier.
+Maybe you simply want to create a tool from stratch. Then just follow step 3, 4, 5, or 6 from the list [below](#add-support-for-new-language) with 'name' appended with a descriptive identifier.
 
 ## Add support for new language
 

@@ -6,7 +6,6 @@
 //
 // Just set these values
 //
-
 const char *name_c                  = "c";
 const char *extensions_c[]          = {"c", "h"};
 
@@ -18,7 +17,6 @@ Delexer const delexer_c_default     = delex_c;
 //
 // Automated from here
 //
-
 string extension_array_c[array_count(extensions_c)];
 
 Language get_language_c()

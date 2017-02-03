@@ -4,16 +4,31 @@ This document outlines the structure of the code.
 
 ## Contents
 
+- [Terminology](#terminology)
 - [Includes](#includes)
   - [src/](#src)
   - [lib/](#lib)
 - [Translation](#translation)
-  - [Tools](#tools)
-  - [languages/](#languages)
-- [Streamers](#streamers)
+  - [Streamers](#streamers)
+  - [Languages](#languages)
 - [Interfaces](#interfaces)
   - [Developing Interfaces](#developing-interfaces)
 - [support](#support)
+
+## Terminology
+
+For each supported language there are at least one of each of the following procedure types:
+
+- **Lexer:** `Token lex_name(Reader *reader, string *storage)`
+- **Parser:** `Global parse_name(Lexer lexer, Reader *reader, string *storage)`
+- **Deparser:** `void deparse_name(Delexer delexer, Writer *writer, Global ast)`
+- **Delexer:** `void delex_name(Writer *writer, Token token)`
+
+Procedures of these types are collectively referred to as [**tools**](LANGUAGE.md#tools).
+
+As you can see, lexers takes a pointer to a `Reader`.
+Likewise delexers takes a pointer to a `Writer`.
+**Readers** and **writers** are collectively referred to as [**streamers**](#streamers).
 
 ## Includes
 
@@ -30,9 +45,22 @@ This is because the files in src/ are included in a very simple an specific way.
 
 ## Translation
 
-### Tools
+A translation goes through six different step:
+
+1. A source file is read by a reader.
+2. A lexer for some language makes tokens from the characters it obtains from the reader.
+3. Then a parser for the same language makes an abstract syntax tree from these tokens.
+4. The abstract syntax tree is then broken down into tokens by a deparser for some other language.
+5. A delexer for second language then breaks down these new tokens into characters.
+6. Finally, the delexer outputs the characters through a writer.
+
+### Streamers
 
 
+
+### Languages
+
+For more information on how languages are handled and how to contribute by extending language support see [LANGUAGES](LANGUAGES.md).
 
 ## Interfaces
 
