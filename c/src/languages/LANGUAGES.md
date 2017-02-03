@@ -21,8 +21,8 @@ This document outlines the structure of the code in this folder and gives guidli
 
 For each supported language there are at least one of each of the following procedure types:
 
-- **Lexer:** `Token lex_name(Reader *reader, string *storage)`
-- **Parser:** `Global parse_name(Lexer lexer, Reader *reader, string *storage)`
+- **Lexer:** `Token lex_name(Reader *reader, Pool *pool)`
+- **Parser:** `Global parse_name(Lexer lexer, Reader *reader, Pool *pool, Stack *stack, Queue *que)`
 - **Deparser:** `void deparse_name(Delexer delexer, Writer *writer, Global ast)`
 - **Delexer:** `void delex_name(Writer *writer, Token token)`
 
@@ -31,6 +31,8 @@ Procedures of these types are collectively referred to as [**tools**](#tools).
 ## Structure
 
 **Warning: The structure is subject to change, so expect that your contributions will need to be updated.**
+
+_Please let me know if you can give some advice on the structure._
 
 languages.h acts as the bottleneck of the "languages" folder.
 It defines some types, includes */lang.h for every subfolder *,
@@ -105,17 +107,25 @@ Language get_language_c()
 
 #### lexer.h
 
-lexer.h defines one or more procedures of the form `Token lex_name(Reader *reader, string *storage)`.
+lexer.h defines one or more procedures of the form `Token lex_name(Reader *reader, Pool *pool)`.
 `lex_name` reads source code through `reader` (see "..\reader.h") and returns a token.
-It uses `storage` to store strings and other variable-length data.
+It uses `pool` to store strings and other variable-length data.
+
+**Note that [basic_lexer.h](../basic_lexer.h) contains helper-procedures for lexing.**
 
 Sample lexer.h:
 
 #### parser.h
 
-parser.h defines one or more procedures of the form `Global parse_name(Lexer lexer, Reader *reader, string *storage)`.
-`parse_name` lexes tokens by calling `lexer(reader, storage)` and returns an abstract syntax tree.
-Like `lex_name` it also uses `storage` to store data.
+parser.h defines one or more procedures of the form `Global parse_name(Lexer lexer, Reader *reader, Pool *pool, Stack *stack, Queue *que)`.
+`parse_name` lexes tokens by calling `lexer(reader, pool)` and returns an abstract syntax tree.
+Like `lex_name` it also uses `pool` to store data.
+
+The convensions
+
+**Note that [basic_parser.h](../basic_parser.h) contains helper-procedures for parsing.**
+
+_Consider: Are a stack and a queue the right data structures for a parser?_
 
 Sample parser.h:
 
@@ -124,13 +134,19 @@ Sample parser.h:
 deparser.h defines one or more procedures of the form `void deparse_name(Delexer delexer, Writer *writer, Global ast)`.
 `deparse_name` breaks down `ast` into the tokens that would naturally make up such an abstract syntax tree in the specific language and passes each of them to `delexer` together with `writer`.
 
+**Note that [basic_deparser.h](../basic_parser.h) contains helper-procedures for deparsing.**
+
+_Consider: Should deparsers have access to a pool and/or some data structures?_
+
 #### delexer.h
 
 delexer.h defines one or more procedures of the form `void delex_name(Writer *writer, Token token)`.
 `delex_name` breaks down `token` into characters would naturally make up such a token in the specific language and writes them through `writer`.
 
-**The structure is still subject to change.
-If you have advice on the structure please let me know.**
+**Note that [basic_delexer.h](../basic_delexer.h) contains helper-procedures for delexing.**
+
+_Consider: Should delexers have access to a pool and/or some data structures?_
+
 
 ## Extend support of a language
 
@@ -146,8 +162,8 @@ When you want to add support for language "name" go through the following steps.
 
 1. Create the subfolder "name", preferably in lowercase letters.
 2. In the newly created folder make the files lang.h, lexer.h, parser.h, deparser.h, and delexer.h.
-3. In lexer.h put a procedure `Token lex_name(Reader *, string *)` (see [lexer.h](#lexerh)).
-4. In parser.h put a procedure `Global parser_name(Lexer, Reader *, string *, Stack *, Queue *)`  (see [parser.h](#parserh)).
+3. In lexer.h put a procedure `Token lex_name(Reader *, Pool *)` (see [lexer.h](#lexerh)).
+4. In parser.h put a procedure `Global parser_name(Lexer, Reader *, Pool *, Stack *, Queue *)`  (see [parser.h](#parserh)).
 5. In deparser.h put a procedure `void deparser_name(Delexer, Writer *, Global)`  (see [deparser.h](#deparserh)).
 6. In delexer.h put a procedure `void delexer_name(Writer *, Token)`  (see [delexer.h](#delexerh)).
 7. In lang.h put includes to the other files and a procedure `Language get_language_name()`  (see [lang.h](#langh)).

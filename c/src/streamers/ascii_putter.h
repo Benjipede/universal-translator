@@ -2,22 +2,17 @@
 
 void apput(Writer *writer, u32 c)
 {
-    fputc((char)c, (FILE *)writer->data);
+    if(fputc((char)c, (FILE *)writer->data) == EOF)
+        perror(writer->destination);
 }
 
 void apput_more(Writer *writer, u8 *c)
 {
-    fputs((char *)c, (FILE *)writer->data);
+    if(fputs((char *)c, (FILE *)writer->data) == EOF)
+        perror(writer->destination);
 }
 
-Writer make_ascii_putter_open(FILE *file)
-{
-    Writer writer;
-    writer.put = apput;
-    writer.put_more = apput_more;
-    writer.data = file;
-    return writer;
-}
+
 
 Writer make_ascii_putter(char *filename)
 {
@@ -25,8 +20,10 @@ Writer make_ascii_putter(char *filename)
     FILE *file = fopen(filename, "wb");
     if(file)
     {
-        writer = make_ascii_putter_open(file);
-        fclose(file);
+        writer.data = file;
+        writer.destination = filename;
+        writer.put = apput;
+        writer.put_more = apput_more;
     }
     return writer;
 }

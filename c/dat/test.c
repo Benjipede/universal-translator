@@ -1,4 +1,1 @@
-var; // This is not valid C
-var; // For now this is considered valid
-
-/* Woohoo */ wow;
+!/*dsfa*/ var;

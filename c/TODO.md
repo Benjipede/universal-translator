@@ -2,13 +2,12 @@
 
 ## Sure Todos
 
-The things mentioned in this section should be done.
+The todos mentioned in this section should be done at some point.
 
 ### High Priority
 
 - [ ] **Extend support for partially supported languages**
 - [ ] **Add support for not yet supported languages**
-- [ ] Document readers and writers
 - [ ] Finish first pass on [support.c](src/support.c)
 - [ ] Make procedures in lib/unicode.h actually support unicode-characters and UTF-8 strings
 - [ ] Implement readers and writers that support UTF-8 encoding
@@ -19,6 +18,7 @@ The things mentioned in this section should be done.
 
 - [ ] Implement interactive mode for unitrl.c
 - [ ] Develop more interfaces
+- [ ] Document reader and writer capabilities automatically
 
 ### Long Term Goals
 
@@ -27,6 +27,7 @@ The things mentioned in this section should be done.
 
 ## Unsure Todos
 
-The following things are about efficiency versus ease of programming.
+The todos mentioned in this section might or might not be good ideas.
 
-- [ ] Change from unions to inheritance and from passing values to passing pointers.
+- [ ] Change which data structures [tools](c/languages/LANGUAGES.md#tools) has access to.
+- [ ] Change from unions to inheritance and from passing values to passing pointers (Effiency concern)

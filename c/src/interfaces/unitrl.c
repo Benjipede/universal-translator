@@ -8,14 +8,6 @@
 
 #include <stdio.h>
 
-//
-// @Hardcoded
-//
-#define STACK_CAPACITY 0x100
-#define QUEUE_CAPACITY 0x100
-Token stack_buffer[STACK_CAPACITY];
-Token queue_buffer[QUEUE_CAPACITY];
-
 b8 handle_commandline_arguments(int argc, char **argv, Pool *pool, char **source, char **destination, Reader *reader, Lexer *lexer, Parser *parser, Deparser *deparser, Delexer *delexer, Writer *writer)
 {
     s64 source_language, target_language;
@@ -230,9 +222,6 @@ int main(int argc, char **argv)
     Delexer delexer;
     Deparser deparser;
     
-    Stack stack;
-    Queue que;
-    
     Pool pool = make_default_pool();
     
     {
@@ -240,11 +229,9 @@ int main(int argc, char **argv)
         if(!handle_commandline_arguments(argc, argv, &pool, &source, &destination, &reader, &lexer, &parser, &deparser, &delexer, &writer))
             return 0;
     }
-    stack = make_stack(stack_buffer, STACK_CAPACITY);
-    que = make_queue(queue_buffer, QUEUE_CAPACITY);
     
     {
-        Global ast = parse_globals(parser, lexer, &reader, &pool, &stack, &que);
+        Global ast = parse_globals(parser, lexer, &reader, &pool);
         deparser(delexer, &writer, ast);
     }
     

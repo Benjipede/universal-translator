@@ -71,39 +71,29 @@ u32 adpeek(Reader *reader, s64 count)
         return (u32)*destination;
 }
 
-Reader make_ascii_dumper_open(FILE *file, Pool *pool)
-{
-    
-    Reader reader;
-    reader.curr = adcurr;
-    reader.next = adnext;
-    reader.prev = adprev;
-    reader.move = admove;
-    reader.peek = adpeek;
-    strengthen_reader(&reader);
-    
-    {
-        u64 filesize;
-        fseek(file, 0, SEEK_END);
-        filesize = ftell(file);
-        fseek(file, 0, SEEK_SET);
-        
-        reader.data = get_memory(pool, sizeof(adData));
-        ((adData *)reader.data)->first = get_memory_align(pool, filesize, 1);
-        ((adData *)reader.data)->current = ((adData *)reader.data)->first;
-        ((adData *)reader.data)->last = ((adData *)reader.data)->first + fread(((adData *)reader.data)->first, 1, filesize, file) - 1;
-    }
-    
-    return reader;
-}
-
 Reader make_ascii_dumper(char *filename, Pool *pool)
 {
     Reader reader = {0};
     FILE *file = fopen(filename, "rb");
     if(file)
     {
-        reader = make_ascii_dumper_open(file, pool);
+        reader.curr = adcurr;
+        reader.next = adnext;
+        reader.prev = adprev;
+        reader.move = admove;
+        reader.peek = adpeek;
+        strengthen_reader(&reader);
+        {
+            u64 filesize;
+            fseek(file, 0, SEEK_END);
+            filesize = ftell(file);
+            fseek(file, 0, SEEK_SET);
+            
+            reader.data = get_memory(pool, sizeof(adData));
+            ((adData *)reader.data)->first = get_memory_align(pool, filesize, 1);
+            ((adData *)reader.data)->current = ((adData *)reader.data)->first;
+            ((adData *)reader.data)->last = ((adData *)reader.data)->first + fread(((adData *)reader.data)->first, 1, filesize, file) - 1;
+        }
         fclose(file);
     }
     return reader;

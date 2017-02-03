@@ -5,21 +5,32 @@
 #include "misc.h"
 
 #include <stdlib.h>
+struct Pool;
+void *get_memory(struct Pool *pool, s64 nbytes);
+void *get_more_memory(struct Pool *pool, void *old_memory, s64 nbytes, s64 old_nbytes);
 
+// Set pool to NULL to use malloc as allocator
 typedef struct
 {
     u8 **data;
     s64 count;
     s64 capacity;
+    
+    struct Pool *pool;
 } PointerArray;
 
-PointerArray make_pointer_array(s64 capacity)
+PointerArray make_pointer_array(s64 capacity, struct Pool *pool)
 {
     PointerArray array;
     array.count = 0;
     array.capacity = 0;
+    array.pool = pool;
     
-    u8 **memory = (u8 **)malloc(capacity);
+    u8 **memory;
+    if(pool)
+        memory = (u8 **)get_memory(pool, sizeof(u8 *) * capacity);
+    else
+        memory = (u8 **)malloc(sizeof(u8 *) * capacity);
     ASSERT(memory);
     array.data = memory;
     array.capacity = capacity;
@@ -27,11 +38,20 @@ PointerArray make_pointer_array(s64 capacity)
     return array;
 }
 
+PointerArray make_default_pointer_array()
+{
+    return make_pointer_array(8, NULL);
+}
+
 void reserve_pointers(PointerArray *array, s64 amount)
 {
     if(array->capacity < amount)
     {
-        u8 **memory = (u8 **)realloc(array->data, amount);
+        u8 **memory;
+        if(array->pool)
+            memory = (u8 **)get_more_memory(array->pool, (u8 *)array->data, sizeof(u8 *) * amount, sizeof(u8 *) * array->capacity);
+        else
+            memory = (u8 **)realloc(array->data, sizeof(u8 *) * amount);
         ASSERT(memory);
         array->data = memory;
         array->capacity = amount;

@@ -1,6 +1,7 @@
 typedef struct Writer
 {
     void *data;
+    char *destination;
     
     void (*put)(struct Writer *, u32);
     void (*put_more)(struct Writer *, u8 *);

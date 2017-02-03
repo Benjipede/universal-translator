@@ -80,18 +80,28 @@ Space parse_space(Lexer lexer, Reader *reader, Pool *pool, Stack *stack, Queue *
     return result;
 }
 
-#define GLOBALS_BUFFER_SIZE 0x10
-Global globals_buffer[GLOBALS_BUFFER_SIZE];
-
-Global parse_globals(Parser parser, Lexer lexer, Reader *reader, Pool *pool, Stack *stack, Queue *que)
+//
+//
+//
+Global parse_globals(Parser parser, Lexer lexer, Reader *reader, Pool *pool)
 {
+#define STACK_CAPACITY 256
+#define QUEUE_CAPACITY 256
+    Stack stack = make_stack(get_memory(pool, sizeof(Token) * STACK_CAPACITY), STACK_CAPACITY);
+    Queue que = make_queue(get_memory(pool, sizeof(Token) * QUEUE_CAPACITY), QUEUE_CAPACITY);
+    
     Global ast;
     ast.type = Global_globals;
-    ast.globals.elements = globals_buffer;
+    ast.globals.elements = (Global *)get_memory(pool, 0);
     ast.globals.count = 0;
-    for(Global global = parser(lexer, reader, pool, stack, que); global.type != Global_eof; global = parser(lexer, reader, pool, stack, que))
+    
+    for(Global global = parser(lexer, reader, pool, &stack, &que); global.type != Global_eof; global = parser(lexer, reader, pool, &stack, &que))
     {
+        Global *memory = (Global *)get_more_memory(pool, ast.globals.elements, sizeof(Global) * (ast.globals.count+1), sizeof(Global) * ast.globals.count);
+        ASSERT(memory)
+        ast.globals.elements = memory;
         ast.globals.elements[ast.globals.count++] = global;
     }
+    
     return ast;
 }

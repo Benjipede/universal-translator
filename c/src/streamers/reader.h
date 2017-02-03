@@ -4,6 +4,7 @@
 typedef struct Reader
 {
     void *data;
+    char *source;
     
     u32 (*curr)(struct Reader *);
     
