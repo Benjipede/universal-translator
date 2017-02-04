@@ -1,11 +1,5 @@
 # Universal Translator
 
- #dsfa
-
-dd#dsfa
-
-dd\#sdaf
-
 Universal Translator is a tool for translating source code between programming languages that aims to make translations as drugde-free as possible.
 Therefore, it not only translates the code, but also comments and whitespace.
 Unsupported language features and syntax errors are translated into marked comments.
