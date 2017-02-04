@@ -1,10 +1,6 @@
 # Todos
 
-## Sure Todos
-
-The todos mentioned in this section should be done at some point.
-
-### High Priority
+## High Priority
 
 - [ ] **Extend support for partially supported languages**
 - [ ] **Add support for not yet supported languages**
@@ -14,20 +10,14 @@ The todos mentioned in this section should be done at some point.
 - [ ] Extend command line support of unitrl.c to handle folders
 - [ ] Extend support.c to handle all languages in one fell swoop
 
-### Low Priority
+## Low Priority
 
 - [ ] Implement interactive mode for unitrl.c
 - [ ] Develop more interfaces
 - [ ] Document reader and writer capabilities automatically
 
-### Long Term Goals
+## Long Term Goals
 
 - [ ] Add support for C++
 - [ ] Add support for JAI
-
-## Unsure Todos
-
-The todos mentioned in this section might or might not be good ideas.
-
-- [ ] Change from unions to inheritance and from passing values to passing pointers (Effiency concern)
-- [ ] Change which data structures [tools](c/languages/LANGUAGES.md#tools) has access to.
+- [ ] Develop support for optimizer tools that optimize abstract syntax trees before deparsing them to make use of the strenghs of target languages

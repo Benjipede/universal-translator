@@ -17,12 +17,14 @@ This document outlines the structure of the code.
 
 ## Terminology
 
+Some terminology to reduce the amount of text:
+
 For each supported language there are at least one of each of the following procedure types:
 
-- **Lexer:** `Token lex_name(Reader *reader, string *storage)`
-- **Parser:** `Global parse_name(Lexer lexer, Reader *reader, string *storage)`
-- **Deparser:** `void deparse_name(Delexer delexer, Writer *writer, Global ast)`
-- **Delexer:** `void delex_name(Writer *writer, Token token)`
+- **Lexer**: `Token lex_name(Reader *reader, string *storage)`
+- **Parser**: `Global parse_name(Lexer lexer, Reader *reader, string *storage)`
+- **Deparser**: `void deparse_name(Delexer delexer, Writer *writer, Global ast)`
+- **Delexer**: `void delex_name(Writer *writer, Token token)`
 
 Procedures of these types are collectively referred to as [**tools**](LANGUAGE.md#tools).
 
@@ -56,11 +58,11 @@ A translation goes through six different step:
 
 ### Streamers
 
-
+The code for streamers exists in [src/streamers](src/streamers).
 
 ### Languages
 
-For more information on how languages are handled and how to contribute by extending language support see [LANGUAGES](LANGUAGES.md).
+For more information on how languages are handled and how to contribute by expanding language support see [LANGUAGES](LANGUAGES.md).
 
 ## Interfaces
 

@@ -1,6 +1,8 @@
 #ifndef POOL_H
 #define POOL_H
 
+// inspired by the pool implemented in JAI by Jonathan Blow
+
 #include "pointer_array.h"
 
 #define POOL_BUCKET_SIZE_DEFAULT 65536

@@ -1,6 +1,8 @@
 #ifndef POINTER_ARRAY_H
 #define POINTER_ARRAY_H
 
+// inspired by the dynamic array implemented in JAI by Jonathan Blow
+
 #include "nicetypes.h"
 #include "misc.h"
 
