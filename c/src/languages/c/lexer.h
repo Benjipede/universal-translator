@@ -5,8 +5,8 @@ b8 still_unknown_c(Reader *reader, Pool *pool)
     return !is_alpha(c) && c != '_' && c != ';' && c != '/';
 }
 
-SUPPORT(DELIMITER, line comment, multiline comment, identifier, semicolon, DELIMITER)
 Token lex_c(Reader *reader, Pool *pool)
+SUPPORT(line comment,multiline comment,identifier,;,)
 {
     Token token;
     u32 c;

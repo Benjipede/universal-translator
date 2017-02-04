@@ -1,9 +1,8 @@
 #ifndef UNICODE_H
 #define UNICODE_H
 
-//
-// Characters
-//
+#define eof 0xffffffff // Use as end of file character
+#define sof 0xfffffffe // Use as start of file character
 
 // Should
 #define ONE_BYTE(arg)       (((u8)(arg) >> 7) ^ 0x1)

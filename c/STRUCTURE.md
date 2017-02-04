@@ -13,7 +13,6 @@ This document outlines the structure of the code.
   - [Languages](#languages)
 - [Interfaces](#interfaces)
   - [Developing Interfaces](#developing-interfaces)
-- [support](#support)
 
 ## Terminology
 
@@ -78,6 +77,7 @@ You are more than welcome to develop interfaces for Universal Translator.
 The way [includes](#Includes) are handled means that you only have to include bottleneck.h to have access to all utilities of Universal Translator.
 
 Put the source code for your interface in src/interface/.
+
 **To avoid clutter in the case that others decide to develop their own interfaces use only one file or put all files in a subfolder.**
 
 ## support

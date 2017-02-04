@@ -1,6 +1,3 @@
-#define eof 0xffffffff
-#define sof 0xfffffffe
-
 typedef struct Reader
 {
     void *data;

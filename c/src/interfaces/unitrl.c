@@ -13,8 +13,6 @@ b8 handle_commandline_arguments(int argc, char **argv, Pool *pool, char **source
     s64 source_language, target_language;
     b8 infer_extensions;
     
-    printf("%lld\n", sizeof(Token_eof));
-    
     if(argc == 1)
     {
         char *description =
