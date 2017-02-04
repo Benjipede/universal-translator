@@ -1,15 +1,16 @@
 #include "../lib/files_and_directories.h"
-#include "streamers/streamer.h"
+#include "../lib/string_array.h"
 
 #include <stdio.h>
 #include <sys/stat.h>
 
-b8 directory_exists(char *path)
+#define MAX_FILENAME_COUNT 10 // @Hardcoded: SUPPORT.md deparser.h
+
+typedef struct
 {
-    struct stat sb;
-    b8 result = stat(path, &sb) == 0;
-    return result;
-}
+    string name;
+    StringArray dependencies;
+} CodeNodeDeclaration;
 
 typedef enum
 {
@@ -125,7 +126,6 @@ int main(int argc, char **argv)
     }
     
     path.count = initial_path.count + short_name.count + 1;
-    #define MAX_FILENAME_COUNT 10 // @Hardcoded: SUPPORT.md deparser.h
     path.data = (u8 *)get_memory_align(&pool, path.count + MAX_FILENAME_COUNT + 1, 1);
     copy_string(path.data, initial_path);
     copy_string(path.data + initial_path.count, short_name);
@@ -284,12 +284,29 @@ int main(int argc, char **argv)
         return 0;
     }
     
-    for(s64 index = 0; index < argc; ++index)
+    
+    if(!directory_exists((char *)path.data))
     {
-        FILE *langfile, /**suppfile,*/ *toolfile;
+        printf("languages/%s does not exist.\nRun support -new %s to make it and all the files needed for a language.\n", short_name.data, short_name.data);
+        return 0;
+    }
+    
+
+    {
+        #define STARTING_TOKEN_CAPACITY 256
+        #define STARTING_CODE_NODE_CAPACITY 256
+        StringArray token_array;
+        PointerArray code_node_array;
         
-        string langname = path;
-        langname.count += copy_string_from_cstring(path.data + path.count, "LANG.md").count;
+        FILE *langfile, *suppfile, *toolfile;
+        string langname, suppname, toolname;
+        char *text;
+        
+        text = "LANG.md";
+        langname.count = path.count + strlen(text);
+        langname.data = get_memory_align(&pool, langname.count + 1, 1);
+        copy_string(langname.data, path);
+        copy_string_from_cstring(langname.data + path.count, text);
         langname.data[langname.count] = 0;
         langfile = fopen((char *)langname.data, "rb");
         if(!langfile)
@@ -298,8 +315,77 @@ int main(int argc, char **argv)
             return 1;
         }
         
-        string toolname = path;
-        toolname.count += copy_string_from_cstring(path.data + path.count, "lexer.h").count;
+        {
+            string token_name;
+            b8 after_line_feed = 0;
+            b8 cont = 1;
+            
+            if(!move_past_string(langfile, string_from_cstring("## Tokens")))
+            {
+                printf("%s/LANG.md does not contain header '## Tokens'", short_name.data);
+                return 0;
+            }
+            
+            token_array = make_string_array(STARTING_TOKEN_CAPACITY, &pool);
+            token_name.count = 0;
+            while(cont)
+            {
+                int c = fgetc(langfile);
+                switch(c)
+                {
+                    case EOF:
+                    {
+                        printf("%s/LANG.md does not contain header '## Code Nodes'", short_name.data);
+                    } return 0;
+                    case ',':
+                    {
+                        if(token_name.count)
+                        {
+                            add_string(&token_array, token_name);
+                            token_name.count = 0;
+                        }
+                    } break;
+                    case '\n':
+                    {
+                        after_line_feed = 1;
+                        if(token_name.count)
+                        {
+                            add_string(&token_array, token_name);
+                            token_name.count = 0;
+                        }
+                    } break;
+                    case '#':
+                    {
+                        if(after_line_feed == 1)
+                        {
+                            cont = 0;
+                            
+                        }
+                    } break;
+                }
+            }
+        }
+        fclose(langfile);
+        
+        text = "SUPPORT.md";
+        suppname.count = path.count + strlen(text);
+        suppname.data = get_memory_align(&pool, suppname.count + 1, 1);
+        copy_string(suppname.data, path);
+        copy_string_from_cstring(suppname.data + path.count, text);
+        suppname.data[suppname.count] = 0;
+        suppfile = fopen((char *)suppname.data, "rb");
+        if(!suppfile)
+        {
+            perror((char *)suppname.data);
+            return 1;
+        }
+        
+        toolname.data = get_memory_align(&pool, path.count + MAX_FILENAME_COUNT + 1, 1);
+        copy_string(toolname.data, path);
+        
+        text = "lexer.h";
+        toolname.count = path.count + strlen(text);
+        copy_string_from_cstring(toolname.data + path.count, text);
         toolname.data[toolname.count] = 0;
         toolfile = fopen((char *)toolname.data, "rb");
         if(!toolfile)
@@ -308,50 +394,6 @@ int main(int argc, char **argv)
             return 1;
         }
         
-        {
-            string string_to_match = string_from_cstring("SUPPORT(");
-            for(s64 match = 0; match < string_to_match.count; )
-            {
-                int c = fgetc(toolfile);
-                if(c < 0)
-                {
-                    printf("No support information in %s\n", toolname.data);
-                    return 0;
-                }
-                if(c == string_to_match.data[match])
-                    ++match;
-            }
-            printf("FOUND!\n");
-            /*
-            while(1)
-            {
-                int c;
-                switch(c)
-                {
-                    case ')':
-                    {
-                        
-                    } break;
-                    case ',':
-                    {
-                        
-                    } break;
-                    case '\\':
-                    {
-                        c = fgetc(
-                    } break;
-                    default:
-                    {
-                        if(c < 0)
-                        {
-                            printf("Syntax error");
-                            return 0;
-                        }
-                    }
-                }
-            }
-            */
-        }
     }
     return 0;
 }
