@@ -2,7 +2,7 @@
 
 ## High Priority
 
-- [ ] **Extend support for partially supported languages**
+- [ ] **Expand support for partially supported languages**
 - [ ] **Add support for not yet supported languages**
 - [ ] Finish first pass on [support.c](src/support.c)
 - [ ] Make procedures in lib/unicode.h actually support unicode-characters and UTF-8 strings

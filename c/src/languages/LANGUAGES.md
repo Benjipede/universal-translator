@@ -13,7 +13,7 @@ This document outlines the structure of the code in this folder and gives guidli
     - [parser.h](#parserh)
     - [deparser.h](#deparserh)
     - [delexer.h](#delexerh)
-- [Extend support of a language](#extend-support-of-a-language)
+- [Expand support of a language](#expand-support-of-a-language)
   - [Create a new tool for an existing language](#create-a-new-tool-for-an-existing-language)
 - [Add support for new language](#add-support-for-new-language)
 
@@ -55,7 +55,7 @@ Sample subfolder:
 lang.h acts as the bottleneck of its subfolder.
 It includes [the other files](subfolders).
 Furthermore, it defines the `Language get_language_*()` function for the language which returns some information about the language,
-which at the time of this writing is the name of the language, possible extensions and the default tools (see example below).
+which at the time of this writing is the name of the language, possible extensions and the default [tools](#tools) (see example below).
 The primary extension is returned as the first possible extension.
 This means that it can be used for extension-inference by interfaces (see [unitrl](../interfaces/unitrl.c)).
 
@@ -147,10 +147,9 @@ delexer.h defines one or more procedures of the form `void delex_name(Writer *wr
 
 _Consider: Should delexers have access to a pool and/or some data structures?_
 
+## Expand support of a language
 
-## Extend support of a language
-
-To extend support of a language you simply augment the existing tools for that language to handle more cases.
+To expand support of a language you simply augment the existing tools for that language to handle more cases.
 
 ### Create a new tool for an existing language
 

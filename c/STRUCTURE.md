@@ -6,8 +6,8 @@ This document outlines the structure of the code.
 
 - [Terminology](#terminology)
 - [Includes](#includes)
-  - [src/](#src)
   - [lib/](#lib)
+  - [src/](#src)
 - [Translation](#translation)
   - [Streamers](#streamers)
   - [Languages](#languages)
