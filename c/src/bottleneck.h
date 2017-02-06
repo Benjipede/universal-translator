@@ -6,7 +6,8 @@
  */
 
 //
-// Everything needed from ../lib/ needed by streamers and tools
+// Everything needed from ../lib/ needed by tools.
+// Streamers must include libraries specific to their needs.
 //
 #include "../lib/string.h"
 

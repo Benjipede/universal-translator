@@ -66,13 +66,15 @@ void add_string(StringArray *array, string text)
 }
 
 string pop_string(StringArray *array) {
+    string result;
+    
     if(array->count == 0) {
-        string empty = {0, 0};
+        result.count = 0;
         ASSERT(0);
-        return empty;
+        return result;
     }
 
-    string result = array->data[array->count-1];
+    result = array->data[array->count-1];
     array->count -= 1;
 
     return result;

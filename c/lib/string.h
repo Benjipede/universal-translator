@@ -4,11 +4,21 @@
 #include "pool.h"
 #include "unicode.h"
 
+#include <string.h>
+
 typedef struct
 {
     s64 count;
     u8 *data;
 } string;
+
+void append_character(string *text, u32 c)
+{
+    u8 *d = (u8 *)&c;
+    u8 size = utf8_size(d);
+    for(s64 index = 0; index < size; ++index)
+        text->data[text->count++] = d[index];
+}
 
 string to_upper(string text)
 {
@@ -120,7 +130,7 @@ string get_filename_extension(char *argument)
 
 char *make_filename(string basename, string extension, Pool *pool)
 {
-    char *result = get_memory_align(pool, basename.count + 1 + extension.count + 1, 1);
+    char *result = (char *)get_memory_align(pool, basename.count + 1 + extension.count + 1, 1);
     copy_string((u8 *)result, basename);
     result[basename.count] = '.';
     copy_string((u8 *)result + basename.count + 1, extension);

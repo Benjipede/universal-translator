@@ -178,22 +178,9 @@ A short description of the language at the top of LANG would be nice, but it is 
 
 The text in the tokens section list all the kinds of tokens the language has.
 
-The name of a kind of token can contain characters of all types except some types of whitespace characters, though **commas** have to be escaped with backslashes.
-Backslashes can also be used to write line feeds, tabs, and carriage returns in the way you know and love.
-Furthermore, any spaces following a backslash are ignored.
-Otherwise '\*' will evaluate to '*' for any character * as you would expect.
-Note that Hashtags should also be escaped if at the beginning of a new line.
-
-Names are separated by commas and line feeds. Multiple separators in a row are allowed.
-
 ### Code Notes
 
-The text in the code notes section lists all the kinds of code notes the language has including what tokens and other code nodes they can contain.
-
-The name of a kind of code note can contain characters of all types except some types of whitespace characters, though **colons** have to be escaped with backslashes.
-Otherwise everything works as described [above](#tokens).
-
-Names should be followed by a semicolon and then the kinds of tokens and other code nodes that it can possibly contain. Here the format for [listing token names](#tokens) apply for both tokens and code nodes. This means **commas** rather than **colons** need escaping. However, after a line feed a new code node declaration is expected unless it is followed by a semicolon.
+The text in the code notes section lists all the kinds of code notes the language has including what tokens they can contain.
 
 ### Marking Tools
 

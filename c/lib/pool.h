@@ -5,6 +5,8 @@
 
 #include "pointer_array.h"
 
+#include <memory.h>
+
 #define POOL_BUCKET_SIZE_DEFAULT 65536
 #define POOL_OUT_OF_BAND_SIZE_DEFAULT 6554
 
