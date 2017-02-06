@@ -28,6 +28,11 @@ string read_identifier(FILE *file, Pool *pool)
     ByteArray character_array;
     
     int c = fgetc(file);
+    while(c == ' ' || c == '\n')
+    {
+        c = fgetc(file);
+    }
+    
     if(!is_alpha(c) && c != '_')
     {
         result.count = 0;

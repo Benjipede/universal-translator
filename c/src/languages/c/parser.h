@@ -1,4 +1,5 @@
 Global parse_c(Lexer lexer, Reader *reader, Pool *pool, Stack *stack, Queue *que)
+SUPPORT(unknown,space,variable)
 {
     Global ast = {0};
     Token token;

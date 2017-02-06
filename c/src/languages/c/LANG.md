@@ -14,6 +14,7 @@ eof,sof,unknown token,unsupported token,whitespace,line comment,multiline commen
 
 unknown:()
 space:(whitespace,line comment,multiline comment,)
+variable:(identifier,;,)
 struct node:(struct,identifier,{,},;,)
 
 enum node:(enum,identifier,{,},;,)

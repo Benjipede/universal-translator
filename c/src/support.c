@@ -258,9 +258,9 @@ StringArray read_support_list(FILE *file, Pool *pool, string short_name)
 }
 
 
-void read_tool_support_information(FILE *file, Pool *pool, StringArray *name_array, ArrayArray *support_array_array,  StringArray token_array, string short_name, Mode mode)
+void read_tool_support_information(FILE *file, char *return_type, Pool *pool, StringArray *name_array, ArrayArray *support_array_array,  StringArray token_array, string short_name, Mode mode)
 {
-    for(s64 tool_index = 0; read_past_cstring(file,"Token "); ++tool_index)
+    for(s64 tool_index = 0; read_past_cstring(file, return_type); ++tool_index)
     {
         StringArray supported_name_array;
         ByteArray support_array = make_byte_array(token_array.count, pool);
@@ -274,7 +274,7 @@ void read_tool_support_information(FILE *file, Pool *pool, StringArray *name_arr
         add_string(name_array, name);
         add_array(support_array_array, *(PointerArray *)&support_array);
         
-        if((mode & Mode_verbose) && !read_past_cstring_break_at(file, "SUPPORT", "Token "))
+        if((mode & Mode_verbose) && !read_past_cstring_break_at(file, "SUPPORT", return_type))
         {
             printf("\n%.*s does not appear to have any support information\n", (int)name.count, name.data);
             if(token_array.count)
@@ -302,7 +302,7 @@ void read_tool_support_information(FILE *file, Pool *pool, StringArray *name_arr
             }
             if(search_index == token_array.count)
             {
-                printf("%.*s is said to be supported by lexer _, but it is not specified as a token in %.*s/LANG.md\n", (int)supported_name_array.data[index].count, supported_name_array.data[index].data, (int)short_name.count, short_name.data);
+                printf("%.*s is said to be supported by tool _, but it is not specified in %.*s/LANG.md\n", (int)supported_name_array.data[index].count, supported_name_array.data[index].data, (int)short_name.count, short_name.data);
                 continue;
             }
         }
@@ -517,8 +517,8 @@ int main(int argc, char **argv)
         StringArray token_array;
         StringArray node_array;
         ArrayArray node_dependency_array_array;
-        StringArray lexer_name_array/*, parser_name_array, deparser_name_array, delexer_name_array*/;
-        ArrayArray lexer_array_array/*, parser_array_array, deparser_array_array, delexer_array_array*/;
+        StringArray lexer_name_array, parser_name_array/*, deparser_name_array, delexer_name_array*/;
+        ArrayArray lexer_array_array, parser_array_array/*, deparser_array_array, delexer_array_array*/;
         
         FILE *langfile, *suppfile, *toolfile;
         string langname, suppname, toolname;
@@ -706,7 +706,24 @@ int main(int argc, char **argv)
         lexer_name_array = make_string_array(1, &pool);
         lexer_array_array = make_array_array(1, &pool);
         
-        read_tool_support_information(toolfile, &pool, &lexer_name_array, &lexer_array_array, token_array, short_name, mode);
+        read_tool_support_information(toolfile, "Token ", &pool, &lexer_name_array, &lexer_array_array, token_array, short_name, mode);
+        
+        
+        text = "parser.h";
+        toolname.count = path.count + strlen(text);
+        copy_string_from_cstring(toolname.data + path.count, text);
+        toolname.data[toolname.count] = 0;
+        toolfile = fopen((char *)toolname.data, "rb");
+        if(!toolfile)
+        {
+            perror((char *)toolname.data);
+            return 1;
+        }
+        
+        parser_name_array = make_string_array(1, &pool);
+        parser_array_array = make_array_array(1, &pool);
+        
+        read_tool_support_information(toolfile, "Global ", &pool, &parser_name_array, &parser_array_array, node_array, short_name, mode);
         
         text = "SUPPORT.md";
         suppname.count = path.count + strlen(text);
