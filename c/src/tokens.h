@@ -1,10 +1,5 @@
 typedef enum
 {
-    Comment_single,
-    Comment_multi,
-} CommentType;
-
-typedef enum {
     Token_none,
     Token_error,
     Token_unsupported,
@@ -16,100 +11,40 @@ typedef enum {
     Token_semicolon,
     Token_sof,
     Token_eof,
-} TokenType;
+} TokenKind;
 
-typedef struct Token {
-    TokenType type;
-    union
-    {
-        string text;
-        struct
-        {
-            string text;
-            CommentType type;
-        } comment;
-        struct
-        {
-            s64 newline_count, space_count;
-        };
-    };
-    
+typedef struct
+{
+    TokenKind type;
 } Token;
 
-typedef struct Stack
+typedef struct
 {
-    Token *elements;
-    s64 count;
-    s64 capacity;
-} Stack;
-
-Stack make_stack(Token *elements, s64 capacity)
-{
-    Stack result;
-    result.elements = elements;
-    result.count = 0;
-    result.capacity = capacity;
-    return result;
+    Token self;
+    string text;
 }
 
-b8 stack_is_empty(Stack stack)
+typedef struct
 {
-    return stack.count == 0;
-}
+    Token self;
+    s64 line_feed_count;
+    s64 space_count;
+} TokenWhitespace
 
-b8 push(Stack *stack, Token token)
+typedef struct
 {
-    if(stack->count >= stack->capacity)  return 0;
-    stack->elements[stack->count++] = token;
-    return 1;
-}
+    TokenText self;
+    CommentKind kind;
+} TokenComment;
 
-Token pop(Stack *stack)
+typedef struct
 {
-    Token token;
-    if(stack->count <= 0)
-        token.type = Token_none;
-    else
-        token = stack->elements[--stack->count];
-    return token;
-}
+    TokenText self;
+    LiteralType type;
+} TokenLiteral;
 
-
-typedef struct Queue
+typedef struct
 {
-    Token *elements;
-    s64 first_index;
-    s64 count;
-    s64 capacity;
-} Queue;
-
-Queue make_queue(Token *elements, s64 capacity)
-{
-    Queue result;
-    result.elements = elements;
-    result.first_index = 0;
-    result.count = 0;
-    result.capacity = capacity;
-    return result;
-}
-
-b8 queue(Queue *que, Token token)
-{
-    if(que->count >= que->capacity)  return 0;
-    que->elements[(que->first_index + que->count++) % que->capacity] = token;
-    return 1;
-}
-
-Token dequeue(Queue *que)
-{
-    Token token;
-    if(que->count <= 0)
-        token.type = Token_none;
-    else
-    {
-        token = que->elements[que->first_index];
-        que->first_index = (que->first_index + 1) % que->capacity;
-        --que->count;
-    }
-    return token;
-}
+    TokenLiteral self;
+    s64 BitSize;
+} TokenNumberLiteral;

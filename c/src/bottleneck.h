@@ -16,6 +16,7 @@
 //
 #include "streamers/streamer.h"
 
+#include "kinds_and_types.h"
 #include "tokens.h"
 #include "syntax.h"
 
