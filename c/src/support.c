@@ -40,11 +40,20 @@ Mode handle_commandline_arguments(int argc, char **argv, Pool *pool, string *sho
             {
                 mode |= Mode_all;
             }
-            if(argument[0] == 'v' || !strcmp(argument, "verbose"))
+            else if(!strcmp(argument, "ext"))
+            {
+                for(; index < argc; ++index)
+                {
+                    add_pointer(extension_array, (u8 *)argv[index]);
+                    if(index+1 >= argc || argv[index+1][0] == '-')
+                        break;
+                }
+            }
+            else if(argument[0] == 'v' || !strcmp(argument, "verbose"))
             {
                 mode |= Mode_verbose;
             }
-            else if(!strcmp(argument, "new"))
+            else if(argument[0] == 'n' || !strcmp(argument, "new"))
             {
                 mode |= Mode_new;
                 if(index+1 >= argc || argv[index+1][0] == '-')
@@ -57,6 +66,7 @@ Mode handle_commandline_arguments(int argc, char **argv, Pool *pool, string *sho
                         continue;
                     ++index;
                 }
+                /*
                 if(!long_name->count)
                 {
                     *long_name = string_from_cstring(argv[index]);
@@ -64,6 +74,7 @@ Mode handle_commandline_arguments(int argc, char **argv, Pool *pool, string *sho
                         continue;
                     ++index;
                 }
+                */
                 if(!extension_array->count)
                 {
                     for(; index < argc; ++index)
@@ -79,82 +90,18 @@ Mode handle_commandline_arguments(int argc, char **argv, Pool *pool, string *sho
                 mode |= Mode_force;
             }
         }
-        else
+        else if(!short_name->count)
         {
             *short_name = to_lower(string_from_cstring(argument));
+        }
+        else
+        {
+            *long_name = string_from_cstring(argument);
         }
     }
     
     return mode;
 }
-
-
-
-typedef struct
-{
-    string name;
-    StringArray dependency_array;
-} CodeNodeDeclaration;
-
-// Set pool to NULL to use malloc as allocator
-typedef struct
-{
-    CodeNodeDeclaration *data;
-    s64 count;
-    s64 capacity;
-    
-    struct Pool *pool;
-} CodeNodeDeclarationArray;
-
-CodeNodeDeclarationArray make_code_node_array(s64 capacity, struct Pool *pool)
-{
-    CodeNodeDeclarationArray array;
-    array.count = 0;
-    array.capacity = 0;
-    array.pool = pool;
-    
-    CodeNodeDeclaration *memory;
-    if(pool)
-        memory = (CodeNodeDeclaration *)get_memory(pool, sizeof(CodeNodeDeclaration) * capacity);
-    else
-        memory = (CodeNodeDeclaration *)malloc(sizeof(CodeNodeDeclaration) * capacity);
-    ASSERT(memory);
-    array.data = memory;
-    array.capacity = capacity;
-    
-    return array;
-}
-
-CodeNodeDeclarationArray make_default_code_node_array()
-{
-    return make_code_node_array(8, NULL);
-}
-
-void reserve_code_nodes(CodeNodeDeclarationArray *array, s64 amount)
-{
-    if(array->capacity < amount)
-    {
-        CodeNodeDeclaration *memory;
-        if(array->pool)
-            memory = (CodeNodeDeclaration *)get_more_memory(array->pool, (u8 *)array->data, sizeof(CodeNodeDeclaration) * amount, sizeof(CodeNodeDeclaration) * array->capacity);
-        else
-            memory = (CodeNodeDeclaration *)realloc(array->data, sizeof(CodeNodeDeclaration) * amount);
-        ASSERT(memory);
-        array->data = memory;
-        array->capacity = amount;
-    }
-}
-
-void add_code_node(CodeNodeDeclarationArray *array, CodeNodeDeclaration decl)
-{
-    if(array->count >= array->capacity)
-    {
-        reserve_code_nodes(array, 2*array->capacity);
-    }
-    
-    array->data[array->count++] = decl;
-}
-
 
 
 #define STARTING_TOKEN_CAPACITY 20
@@ -375,7 +322,7 @@ int main(int argc, char **argv)
             }
             printf("Directory languages/%s created\n", short_name.data);
         }
-        
+        /*
         {
             filename = path;
             filename.count += copy_string_from_cstring(filename.data + filename.count, "LANG.md").count;
@@ -435,19 +382,78 @@ int main(int argc, char **argv)
                 perror((char *)filename.data);
             }
         }
+        */
+        {
+            filename = path;
+            filename.count += copy_string_from_cstring(filename.data + filename.count, "lang.h").count;
+            filename.data[filename.count] = 0;
+            file = fopen((char *)filename.data, "wb");
+            if(file)
+            {
+                fprintf(file,
+"#include \"lexer.h\"\n"
+"#include \"delexer.h\"\n"
+"#include \"parser.h\"\n"
+"#include \"deparser.h\"\n\n"
+"//\n"
+"// Just set these values\n"
+"//\n"
+"const char *name_%s                  = \"%s\";\n"
+"const char *extensions_%s[]          = {", short_name.data, short_name.data, short_name.data);
+                for(s64 index = 0; index < extension_array.count; ++index)
+                    fprintf(file, "\"%s\", ", (char *)extension_array.data[index]);
+                fprintf(file,
+"};\n\n"
+"Lexer const lexer_%s_default         = lex_%s;\n"
+"Parser const parser_%s_default       = parse_%s;\n"
+"Deparser const deparser_%s_default   = deparse_%s;\n"
+"Delexer const delexer_%s_default     = delex_%s;\n\n"
+"//\n"
+"// Automated from here\n"
+"//\n"
+"string extension_array_c[array_count(extensions_%s)];\n\n"
+"Language get_language_%s()\n"
+"{\n"
+"    Language language;\n"
+"    language.name = string_from_cstring(name_%s);\n"
+"    language.lexer = lexer_%s_default;\n"
+"    language.parser = parser_%s_default;\n"
+"    language.deparser = deparser_%s_default;\n"
+"    language.delexer = delexer_%s_default;\n\n"   
+"    language.extensions = extension_array_%s;\n"
+"    for(s64 index = 0; index < array_count(extension_array_%s); ++index)\n"
+"        language.extensions[index] = string_from_cstring(extensions_%s[index]);\n"
+"    language.extension_count = array_count(extension_array_%s);\n"
+"    return language;\n"
+"}",
+                                short_name.data, short_name.data, short_name.data, short_name.data,
+                                short_name.data, short_name.data, short_name.data, short_name.data,
+                                short_name.data, short_name.data,
+                                short_name.data, short_name.data, short_name.data, short_name.data, short_name.data, short_name.data,
+                                short_name.data, short_name.data, short_name.data);
+                fclose(file);
+                printf("lang.h created\n");
+            }
+            else
+            {
+                perror((char *)filename.data);
+            }
+        }
         
         {
+            /*
             char *text =    "SUPPORT()\n"
                             "{\n"
                             "    \n"
                             "}";
+            */
             filename = path;
             filename.count += copy_string_from_cstring(filename.data + filename.count, "lexer.h").count;
             filename.data[filename.count] = 0;
             file = fopen((char *)filename.data, "wb");
             if(file)
             {
-                fprintf(file, "Token lex_%s(Reader *reader, Pool *pool)\n%s", short_name.data, text);
+                fprintf(file, "Token lex_%s(Reader *reader, Pool *pool)\n", short_name.data);
                 fclose(file);
                 printf("lexer.h created\n");
             }
@@ -462,7 +468,7 @@ int main(int argc, char **argv)
             file = fopen((char *)filename.data, "wb");
             if(file)
             {
-                fprintf(file, "Global parse_%s(Lexer lexer, Reader *reader, Pool *pool, Stack *stack, Queue *que)\n%s", short_name.data, text);
+                fprintf(file, "Global parse_%s(Lexer lexer, Reader *reader, Pool *pool, Stack *stack, Queue *que)\n", short_name.data);
                 printf("parser.h created\n");
                 fclose(file);
             }
@@ -478,7 +484,7 @@ int main(int argc, char **argv)
                 printf("deparser.h created\n");
             if(file)
             {
-                fprintf(file, "deparse_%s(Delexer delexer, Writer *writer, Global node)\n%s", short_name.data, text);
+                fprintf(file, "deparse_%s(Delexer delexer, Writer *writer, Global node)\n", short_name.data);
                 fclose(file);
             }
             else
@@ -492,7 +498,7 @@ int main(int argc, char **argv)
             file = fopen((char *)filename.data, "wb");
             if(file)
             {
-                fprintf(file, "delex_%s(Writer *writer, Token token)\n%s", short_name.data, text);
+                fprintf(file, "delex_%s(Writer *writer, Token token)\n", short_name.data);
                 fclose(file);
                 printf("delexer.h created\n");
             }

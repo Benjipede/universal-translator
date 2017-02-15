@@ -7,7 +7,7 @@
 // Just set these values
 //
 const char *name_c                  = "c";
-const char *extensions_c[]          = {"c", "h"};
+const char *extensions_c[]          = {"c", "h",};
 
 Lexer const lexer_c_default         = lex_c;
 Parser const parser_c_default       = parse_c;
