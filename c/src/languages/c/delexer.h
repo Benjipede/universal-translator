@@ -1,6 +1,6 @@
-void delex_c(Writer *writer, Token token)
+void delex_c(Writer *writer, Token *token)
 {
-    switch(token.type)
+    switch(token->kind)
     {
         case Token_none:
         case Token_sof:
@@ -8,48 +8,36 @@ void delex_c(Writer *writer, Token token)
         break;
         case Token_whitespace:
         {
-            delex_whitespace(writer, token);
+            delex_whitespace(writer, (TokenWhitespace *)token);
         } break;
         case Token_unsupported:
         {
             put_cstring(writer, "/* @Unsupported: ");
-            for(s64 index = 0; index < token.text.count; ++index)
-            {
-                put(writer, token.text.data[index]);
-            }
+            put_string(writer, ((TokenText *)token)->text);
             put_cstring(writer, " */");
         } break;
         case Token_unknown:
         {
             put_cstring(writer, "/* @Unknown: ");
-            for(s64 index = 0; index < token.text.count; ++index)
-            {
-                put(writer, token.text.data[index]);
-            }
+            put_string(writer, ((TokenText *)token)->text);
             put_cstring(writer, " */");
         } break;
         case Token_comment:
         {
             put(writer, '/');
-            if(token.comment.type == Comment_single)
+            if(((TokenComment *)token)->type == Comment_single)
                 put(writer, '/');
             else
                 put(writer, '*');
-            for(s64 index = 0; index < token.comment.text.count; ++index)
-            {
-                put(writer, token.comment.text.data[index]);
-            }
-            if(token.comment.type == Comment_multi)
+            put_string(writer, ((TokenText *)token)->text);
+            if(((TokenComment *)token)->type == Comment_multi)
                 put_cstring(writer, "*/");
         } break;
         case Token_identifier:
         {
-            for(s64 index = 0; index < token.text.count; ++index)
-            {
-                put(writer, token.text.data[index]);
-            }
+            put_string(writer, ((TokenText *)token)->text);
         } break;
-        case Token_semicolon:
+        case ';':
         {
             put(writer, ';');
         } break;

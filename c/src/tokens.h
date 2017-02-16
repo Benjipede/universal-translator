@@ -1,40 +1,39 @@
 typedef enum
 {
     Token_none,
-    Token_error,
+    Token_error = 0x10000,
     Token_unsupported,
     Token_unknown,
     Token_whitespace,
     Token_comment,
     Token_identifier,
     Token_literal,
-    Token_semicolon,
     Token_sof,
     Token_eof,
 } TokenKind;
 
 typedef struct
 {
-    TokenKind type;
+    TokenKind kind;
 } Token;
 
 typedef struct
 {
     Token self;
     string text;
-}
+} TokenText;
 
 typedef struct
 {
     Token self;
     s64 line_feed_count;
     s64 space_count;
-} TokenWhitespace
+} TokenWhitespace;
 
 typedef struct
 {
     TokenText self;
-    CommentKind kind;
+    CommentType type;
 } TokenComment;
 
 typedef struct

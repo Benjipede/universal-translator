@@ -1,12 +1,8 @@
-Global parse_simple(Lexer lexer, Reader *reader, Pool *pool, Stack *stack, Queue *que)
+Global parse_simple(Lexer lexer, Reader *reader, Pool *pool, Queue *bank, Queue *que)
 {
     Global ast = {0};
-    Token token;
-    
-    token = pop(stack);
-    if(token.type == Token_none)
-        token = lexer(reader, pool);
-    switch(token.type)
+    Token *token = get_token(lexer, reader, pool, bank);
+    switch(token->kind)
     {
         case Token_eof:
         {
@@ -15,20 +11,20 @@ Global parse_simple(Lexer lexer, Reader *reader, Pool *pool, Stack *stack, Queue
         case Token_unknown:
         {
             ast.type = Global_unknown_token;
-            ast.text = token.text;
+            ast.text = ((TokenText *)token)->text;
         } break;
         case Token_whitespace:
         case Token_comment:
         {
-            push(stack, token);
+            queue(bank, (u8 *)token);
             ast.type = Global_space;
-            ast.space = parse_space(lexer, reader, pool, stack, que);
+            ast.space = parse_space(lexer, reader, pool, bank, que);
         } break;
         case Token_identifier:
         {
             ast.type = Global_expression;
             ast.expression.type = Expression_variable;
-            ast.expression.text = token.text;
+            ast.expression.text = ((TokenText *)token)->text;
         } break;
         default:
         {

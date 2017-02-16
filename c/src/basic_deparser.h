@@ -8,25 +8,26 @@ void deparse_globals(Deparser deparser, Delexer delexer, Writer *writer, Global 
 
 void deparse_space(Delexer delexer, Writer *writer, Space space)
 {
-    Token token_whitespace, token_comment;
-    token_whitespace.type = Token_whitespace;
+    TokenWhitespace token_whitespace;
+    TokenComment token_comment;
+    token_whitespace.self.kind = Token_whitespace;
     {
-        token_whitespace.newline_count = space.initial_whitespace.newline_count;
+        token_whitespace.line_feed_count = space.initial_whitespace.line_feed_count;
         token_whitespace.space_count = space.initial_whitespace.space_count;
-        delexer(writer, token_whitespace);
+        delexer(writer, (Token *)&token_whitespace);
     }
-    token_comment.type = Token_comment;
+    token_comment.self.self.kind = Token_comment;
     for(s64 index = 0; index < space.count; ++index)
     {
         {
-            token_comment.comment.type = space.comments[index].type;
-            token_comment.comment.text = space.comments[index].text;
-            delexer(writer, token_comment);
+            token_comment.type = space.comments[index].type;
+            token_comment.self.text = space.comments[index].text;
+            delexer(writer, (Token *)&token_comment);
         }
         {
-            token_whitespace.newline_count = space.comments[index].whitespace.newline_count;
+            token_whitespace.line_feed_count = space.comments[index].whitespace.line_feed_count;
             token_whitespace.space_count = space.comments[index].whitespace.space_count;
-            delexer(writer, token_whitespace);
+            delexer(writer, (Token *)&token_whitespace);
         }
     }
 }

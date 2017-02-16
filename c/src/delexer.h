@@ -1,3 +1,3 @@
-typedef void (*Delexer)(Writer *, Token);
+typedef void (*Delexer)(Writer *, Token *);
 
 #include "basic_delexer.h"

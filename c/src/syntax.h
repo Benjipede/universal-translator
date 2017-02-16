@@ -1,6 +1,6 @@
 typedef struct
 {
-    s64 newline_count, space_count;
+    s64 line_feed_count, space_count;
 } Whitespace;
 
 typedef struct

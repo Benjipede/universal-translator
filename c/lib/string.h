@@ -104,6 +104,18 @@ b8 begins_with(char *c, char *d)
     return 1;
 }
 
+
+void append_to_string(string *text, u32 c, Pool *pool)
+{
+    u8 size = 1; // @ascii
+    if(pool->bytes_left < size)
+        *text = copy_string(get_memory_align(pool, text->count + size, 1), *text);
+    else
+        get_memory_align(pool, size, 1);
+    text->data[text->count] = (u8)c; // @ascii
+    ++text->count;
+}
+
 string get_filename_basename(char *argument)
 {
     string result;

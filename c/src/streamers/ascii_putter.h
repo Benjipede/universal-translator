@@ -12,7 +12,11 @@ void apput_more(Writer *writer, u8 *c)
         perror(writer->destination);
 }
 
-
+void apput_string(Writer *writer, string text)
+{
+    if(fprintf((FILE *)writer->data, "%*.s", (int)text.count, (char *)text.data) == EOF)
+        perror(writer->destination);
+}
 
 Writer make_ascii_putter(char *filename)
 {
@@ -24,6 +28,7 @@ Writer make_ascii_putter(char *filename)
         writer.destination = filename;
         writer.put = apput;
         writer.put_more = apput_more;
+        strengthen_writer(&writer);
     }
     return writer;
 }

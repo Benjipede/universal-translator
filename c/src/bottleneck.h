@@ -9,6 +9,7 @@
 // Everything needed from ../lib/ needed by tools.
 // Streamers must include libraries specific to their needs.
 //
+#include "../lib/queue.h"
 #include "../lib/string.h"
 
 //

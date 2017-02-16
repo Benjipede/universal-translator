@@ -2,7 +2,7 @@ typedef enum
 {
     Comment_single,
     Comment_multi,
-} CommentKind;
+} CommentType;
 
 typedef enum
 {
@@ -10,4 +10,4 @@ typedef enum
     Literal_unsigned,
     Literal_floating,
     Literal_string,
-}
+} LiteralType;

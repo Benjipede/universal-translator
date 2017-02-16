@@ -1,6 +1,5 @@
 void deparse_c(Delexer delexer, Writer *writer, Global ast)
 {
-    Token token;
     switch(ast.type)
     {
         case Global_globals:
@@ -9,15 +8,17 @@ void deparse_c(Delexer delexer, Writer *writer, Global ast)
         } break;
         case Global_unsupported:
         {
-            token.type = Token_unsupported;
+            TokenText token;
+            token.self.kind = Token_unsupported;
             token.text = ast.text;
-            delexer(writer, token);
+            delexer(writer, (Token *)&token);
         } break;
         case Global_unknown_token:
         {
-            token.type = Token_unknown;
+            TokenText token;
+            token.self.kind = Token_unknown;
             token.text = ast.text;
-            delexer(writer, token);
+            delexer(writer, (Token *)&token);
         } break;
         case Global_space:
         {
@@ -27,17 +28,19 @@ void deparse_c(Delexer delexer, Writer *writer, Global ast)
         {
             if(ast.expression.type == Expression_variable)
             {
-                token.type = Token_identifier;
+                TokenText token;
+                token.self.kind = Token_identifier;
                 token.text = ast.expression.text;
-                delexer(writer, token);
-                token.type = Token_semicolon;
-                delexer(writer, token);
+                delexer(writer, (Token *)&token);
+                token.self.kind = ';';
+                delexer(writer, (Token *)&token);
             }
             else
             {
-                token.type = Token_unsupported;
+                TokenText token;
+                token.self.kind = Token_unsupported;
                 token.text = ast.text;
-                delexer(writer, token);
+                delexer(writer, (Token *)&token);
             }
         } break;
         default:
